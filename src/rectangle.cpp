@@ -1,4 +1,4 @@
-#pragma once
+
 #include<iostream>
 #include<rectangle.hpp>
 void fun1()
