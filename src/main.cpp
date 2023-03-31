@@ -101,6 +101,7 @@ bool WriteToFileExample(string filename, double offset)
   return !file_stream.fail();
 }
 
+void test();
 
 
 int main()
@@ -142,7 +143,13 @@ int main()
   if (!WriteToFileExample("data/prostokat.dat",50)) return 1;
   link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
 
-       Matrix2x2 *matrix = new Matrix2x2();
+       test();
+
+}
+
+void test()
+{
+              Matrix2x2 *matrix = new Matrix2x2();
        std::cout<<*matrix;
        std::cin>>*matrix;
        std::cout<<*matrix;
@@ -155,5 +162,4 @@ int main()
        std::cout<<v1;
        std::cout<<v2;
        std::cout<<v3;
-
 }

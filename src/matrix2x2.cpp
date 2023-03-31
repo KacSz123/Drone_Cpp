@@ -29,5 +29,5 @@ std::ostream& operator << (std::ostream& ostrm,Matrix2x2 matrixx)
         ostrm<<"|";
         ostrm<<std::endl;
     }
-    return ostrm;
+    return ostrm; 
 }
