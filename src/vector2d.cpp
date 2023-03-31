@@ -1,20 +1,43 @@
 
 #include <iostream>
-void fun1v()
-{
-    std::cout<<"Witaj w nowym projekcie\n";
-    std::cout<<"To jest funkcja 1. vector2d\n";
+#include "vector2d.hpp"
 
+
+void Vector2d::setCoord(double x,double y)
+{
+    this->coordinates[0]=x;
+    this->coordinates[1]=y;
 }
-void fun2v()
-{
-    std::cout<<"Witaj w nowym projekcie\n";
-    std::cout<<"To jest funkcja 2. vector2d\n";
 
+
+double Vector2d::getX()
+{
+    return this->coordinates[0];
 }
-void fun3v()
+double Vector2d::getY()
 {
-    std::cout<<"Witaj w nowym projekcie\n";
-    std::cout<<"To jest funkcja 3. vector2d\n";
+    return this->coordinates[1];
+}
+Vector2d::Vector2d()
+{
+    this->coordinates[0]=0;
+    this->coordinates[1]=0;
+}
+Vector2d::Vector2d(double x, double y)
+{
+    this->coordinates[0]=x;
+    this->coordinates[1]=y;
+}
 
+Vector2d operator + (Vector2d v1, Vector2d v2)
+{
+    Vector2d wynik;
+    wynik.setCoord(v1.getX()+v2.getX(), v1.getY()+v2.getY());
+    return wynik;
+}
+
+std::ostream& operator << (std::ostream& ostrm, Vector2d v)
+{
+    ostrm<<"["<<v.getX()<<","<<v.getY()<<"]\n";
+    return ostrm;
 }

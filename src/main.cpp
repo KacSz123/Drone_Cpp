@@ -141,4 +141,19 @@ int main()
   WriteToStreamExample(cout,50);
   if (!WriteToFileExample("data/prostokat.dat",50)) return 1;
   link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
+
+       Matrix2x2 *matrix = new Matrix2x2();
+       std::cout<<*matrix;
+       std::cin>>*matrix;
+       std::cout<<*matrix;
+
+
+       Vector2d v1{1,1}, v2{2,2}, v3;
+
+       v3=v1+v2;
+
+       std::cout<<v1;
+       std::cout<<v2;
+       std::cout<<v3;
+
 }
