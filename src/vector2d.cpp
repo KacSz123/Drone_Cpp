@@ -10,11 +10,11 @@ void Vector2d::setCoord(double x,double y)
 }
 
 
-double Vector2d::getX()
+double const Vector2d::getX()
 {
     return this->coordinates[0];
 }
-double Vector2d::getY()
+double const Vector2d::getY()
 {
     return this->coordinates[1];
 }
@@ -38,7 +38,7 @@ Vector2d operator + (Vector2d v1, Vector2d v2)
 
 std::ostream& operator << (std::ostream& ostrm, Vector2d v)
 {
-    ostrm<<"["<<v.getX()<<","<<v.getY()<<"]";
+    ostrm<<v.getX()<<" "<<v.getY();
     return ostrm;
 }
 

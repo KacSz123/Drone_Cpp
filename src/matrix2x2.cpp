@@ -49,7 +49,7 @@ Vector2d operator * (Matrix2x2 m, Vector2d v)
     {
         for(int j=0; j<2;++j)
         {
-            result.setCoord(i, result.getXorY(i)+(m.getValue(i,j)*v.getXorY(j)));
+            result.setCoord(i, result[i]+(m(i,j)*v[j]));
         }
     }
 

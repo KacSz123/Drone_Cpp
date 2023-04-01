@@ -24,8 +24,8 @@ Rectangle::Rectangle(double startX, double startY, double lenX, double lenY)
 
 std::ostream& operator << (std::ostream& ostrm, Rectangle rect)
 {
-    ostrm << rect.getCorner(0)<<", "<< rect.getCorner(1)
-    <<", "<< rect.getCorner(2)<<", "<< rect.getCorner(3);
+    ostrm << rect.getCorner(0)<<"\n"<< rect.getCorner(1)
+    <<"\n"<< rect.getCorner(2)<<"\n"<< rect.getCorner(3)<<"\n";
     return ostrm;
 }
 
@@ -34,7 +34,7 @@ std::ostream& operator << (std::ostream& ostrm, Rectangle rect)
 void Rectangle :: rotateRectangle(double angle)
 {   
     double radians = angle*(M_PI/180.0);
-    Matrix2x2 m(cos(radians), -1*sin(radians),
+    Matrix2x2 m(cos(radians), -sin(radians),
                 sin(radians), cos(radians));
 
     for(int i=0; i<4; ++i)
