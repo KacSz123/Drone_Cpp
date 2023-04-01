@@ -38,6 +38,12 @@ Vector2d operator + (Vector2d v1, Vector2d v2)
 
 std::ostream& operator << (std::ostream& ostrm, Vector2d v)
 {
-    ostrm<<"["<<v.getX()<<","<<v.getY()<<"]\n";
+    ostrm<<"["<<v.getX()<<","<<v.getY()<<"]";
     return ostrm;
+}
+
+Vector2d& operator += (Vector2d& vec1, Vector2d vec2)
+{
+    vec1.setCoord(vec1.getX()+vec2.getX(),vec1.getY()+vec2.getY());
+    return vec1;
 }

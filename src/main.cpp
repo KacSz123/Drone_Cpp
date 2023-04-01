@@ -149,17 +149,37 @@ int main()
 
 void test()
 {
-              Matrix2x2 *matrix = new Matrix2x2();
-       std::cout<<*matrix;
-       std::cin>>*matrix;
-       std::cout<<*matrix;
+       //        Matrix2x2 *matrix = new Matrix2x2();
+       // std::cout<<*matrix;
+       // std::cin>>*matrix;
+       // std::cout<<*matrix;
 
 
-       Vector2d v1{1,1}, v2{2,2}, v3;
+       // Vector2d v1{1,1}, v2{2,2}, v3;
 
-       v3=v1+v2;
+       // v3=v1+v2;
 
-       std::cout<<v1;
-       std::cout<<v2;
-       std::cout<<v3;
+       // std::cout<<v1;
+       // std::cout<<v2;
+       // std::cout<<v3;
+       // Matrix2x2 matrix(1.0,2.0,3.0,5.0);
+       // std::cout<<std::endl<<matrix<<std::endl;
+       // std::cout<<vec1<<std::endl;
+       // std::cout<<vec2<<std::endl;
+       // vec1+=vec2;
+       // std::cout<<vec1;
+       Vector2d vec1(2.0,2.0),vec2(1.0, 1.0);
+       Rectangle rect(0.0, 0.0, 3.0,5.0),rect2(0.0, 0.0, 4.0,6.0);
+       std::cout<<vec1<<"\n"<<vec2<<"\n"<<rect<<std::endl;
+       rect.moveRectangle(vec2);
+       std::cout<<rect<<std::endl;
+       rect+=vec1;
+       std::cout<<rect<<std::endl;
+       std::cout<<"----------------------------\n";
+       std::cout<<rect2<<std::endl;
+       rect2.rotateRectangle(90.0);
+       std::cout<<rect2<<std::endl;
+
+
+
 }

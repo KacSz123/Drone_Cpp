@@ -17,6 +17,15 @@ Matrix2x2::Matrix2x2()
     }
 }
 
+Matrix2x2::Matrix2x2(double a11, double a12, double a21, double a22)
+{
+
+    this->matrix[0][0]=a11;
+    this->matrix[0][1]=a12;
+    this->matrix[1][0]=a21;
+    this->matrix[1][1]=a22;
+}
+
 std::ostream& operator << (std::ostream& ostrm,Matrix2x2 matrixx)
 {
         for(int i=0; i<2;++i)
@@ -30,4 +39,19 @@ std::ostream& operator << (std::ostream& ostrm,Matrix2x2 matrixx)
         ostrm<<std::endl;
     }
     return ostrm; 
+}
+
+
+Vector2d operator * (Matrix2x2 m, Vector2d v)
+{
+    Vector2d result;
+    for (int i =0; i<2; ++i)
+    {
+        for(int j=0; j<2;++j)
+        {
+            result.setCoord(i, result.getXorY(i)+(m.getValue(i,j)*v.getXorY(j)));
+        }
+    }
+
+    return result;
 }

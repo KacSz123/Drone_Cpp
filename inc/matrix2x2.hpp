@@ -6,6 +6,7 @@ double matrix[2][2];
 private:
 public:
 Matrix2x2();
+Matrix2x2(double,double,double,double);
 inline double getValue(int i, int j){return this->matrix[i][j];}
 inline void setValue(int i, int j, double val){ this->matrix[i][j]=val;}
 friend std::istream& operator >> (std::istream& istrm, Matrix2x2& matrixx)
@@ -26,3 +27,5 @@ friend std::istream& operator >> (std::istream& istrm, Matrix2x2& matrixx)
 
 
 std::ostream& operator << (std::ostream& ostrm,Matrix2x2 const matrixx);
+
+Vector2d operator * (Matrix2x2 m, Vector2d v);

@@ -1,21 +1,66 @@
 
 #include<iostream>
-#include<rectangle.hpp>
-void fun1()
+#include "rectangle.hpp"
+#include <cmath>
+
+Rectangle::Rectangle()
 {
-    std::cout<<"Witaj w nowym projekcie\n";
-    std::cout<<"To jest funkcja 1. \n";
+    Vector2d vec;
+    for (int i=0; i<4; ++i)
+    {
+        this->coordinates[i]=vec;
+    }
+}
+
+Rectangle::Rectangle(double startX, double startY, double lenX, double lenY)
+{
+    this->coordinates[0].setCoord(startX, startY);
+    this->coordinates[1].setCoord(startX, startY-lenY);
+    this->coordinates[2].setCoord(startX+lenX, startY-lenY);
+    this->coordinates[3].setCoord(startX+lenX, startY);
 
 }
-void fun2()
+
+
+std::ostream& operator << (std::ostream& ostrm, Rectangle rect)
 {
-    std::cout<<"Witaj w nowym projekcie\n";
-    std::cout<<"To jest funkcja 2. \n";
+    ostrm << rect.getCorner(0)<<", "<< rect.getCorner(1)
+    <<", "<< rect.getCorner(2)<<", "<< rect.getCorner(3);
+    return ostrm;
+}
+
+
+
+void Rectangle :: rotateRectangle(double angle)
+{   
+    double radians = angle*(M_PI/180.0);
+    Matrix2x2 m(cos(radians), -1*sin(radians),
+                sin(radians), cos(radians));
+
+    for(int i=0; i<4; ++i)
+    {
+        this->coordinates[i] = m*this->coordinates[i];
+    }
 
 }
-void fun3()
-{
-    std::cout<<"Witaj w nowym projekcie\n";
-    std::cout<<"To jest funkcja 3. \n";
 
+
+void Rectangle :: moveRectangle(Vector2d vec)
+{
+    for(int i=0; i<4;++i)
+    {
+        this->setCorner(i, this->getCorner(i)+vec);
+    }
+}
+
+
+
+Rectangle& operator += (Rectangle& rect, Vector2d vec)
+{
+    for(int i=0; i<4;++i)
+    {
+        rect.setCorner(i, rect.getCorner(i)+vec);
+    }
+
+    return rect;
 }

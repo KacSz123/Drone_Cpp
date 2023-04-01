@@ -1,4 +1,4 @@
-__start__: clean_screen clean _free_lines_ obj all __end__ #run
+__start__: clean_screen _free_lines_  clean  _horizontal_line_ all _horizontal_line2_ __end__ #run
 INCLUDEPATH += inc/
 CFLAGS = -g -I$(INCLUDEPATH) -Wall -pedantic -std=c++0x# tutaj można dodawać inne flagi kompilatora
 LIBS =  #tutaj można dodawać biblioteki
@@ -11,54 +11,50 @@ _free_lines_:
 	@echo 
 	@echo
 	@echo
+_horizontal_line_:
+	@echo "----------------------------------------------------------------------------"
+_horizontal_line2_:
+	@echo "----------------------------------------------------------------------------"
 
 __end__:
 	@echo
-	@echo "Skompilowano i skonsolidowano program"
+	@echo "\e[41mSkompilowano i skonsolidowano program\e[49m"
 	@echo "Uruchom plik $(bold)${OUT}$(sgr0) w celu przetestowania programu"  
 	@echo  ""
 	
-all: OBJ/rectangle.o  OBJ/main.o OBJ/vector2d.o OBJ/matrix2x2.o OBJ/gnuplot_link.o
-	@echo "Kompilacja i konsolidacja programu"
-	@echo
+all: OBJ/vector2d.o OBJ/matrix2x2.o OBJ/rectangle.o OBJ/gnuplot_link.o OBJ/main.o 
+	@echo "\e[42mKompilacja i konsolidacja programu\e[49m"
 	g++ -Wall -pedantic -std=c++0x -o ${OUT} OBJ/main.o OBJ/rectangle.o OBJ/vector2d.o OBJ/matrix2x2.o  OBJ/gnuplot_link.o
-	@echo
-	@echo
 
-OBJ/rectangle.o: src/rectangle.cpp inc/rectangle.hpp
-	@echo "Kompilacja pliku $(bold)rectangle.cpp$(sgr0)"
-	@echo
+OBJ/rectangle.o: src/rectangle.cpp inc/rectangle.hpp inc/matrix2x2.hpp inc/vector2d.hpp
+	@echo "\e[44mKompilacja pliku $(bold)rectangle.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/rectangle.cpp -o OBJ/rectangle.o
 	@echo
 	@echo
 
 
 OBJ/vector2d.o: src/vector2d.cpp inc/vector2d.hpp
-	@echo "Kompilacja pliku $(bold)vector2d.cpp$(sgr0)"
-	@echo
+	@echo "\e[44mKompilacja pliku $(bold)vector2d.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/vector2d.cpp -o OBJ/vector2d.o
 	@echo
 	@echo
 
 
-OBJ/matrix2x2.o: src/matrix2x2.cpp inc/matrix2x2.hpp
-	@echo "Kompilacja pliku $(bold)matrix2x2.cpp$(sgr0)"
-	@echo
+OBJ/matrix2x2.o: src/matrix2x2.cpp inc/matrix2x2.hpp inc/vector2d.hpp
+	@echo "\e[44mKompilacja pliku $(bold)matrix2x2.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/matrix2x2.cpp -o OBJ/matrix2x2.o
 	@echo
 	@echo
 
 
 OBJ/gnuplot_link.o: src/gnuplot_link.cpp inc/gnuplot_link.hpp
-	@echo "Kompilacja pliku $(bold)gnuplot_link.cpp$(sgr0)"
-	@echo
+	@echo "\e[44mKompilacja pliku $(bold)gnuplot_link.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/gnuplot_link.cpp -o OBJ/gnuplot_link.o
 	@echo
 	@echo
 
 OBJ/main.o: src/main.cpp inc/rectangle.hpp inc/vector2d.hpp inc/matrix2x2.hpp inc/gnuplot_link.hpp
-	@echo "Kompilacja pliku $(bold)main.cpp$(sgr0)"
-	@echo
+	@echo "\e[44mKompilacja pliku $(bold)main.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/main.cpp -o OBJ/main.o
 	@echo
 	@echo
@@ -73,22 +69,17 @@ OBJ/main.o: src/main.cpp inc/rectangle.hpp inc/vector2d.hpp inc/matrix2x2.hpp in
 
 clean:
 	
-	@echo "Usuwanie plikow $(bold)*.o$(sgr0) w katalogu $(bold)OBJ$(sgr0)"
-	@echo
+	@echo "\e[40mUsuwanie plikow $(bold)*.o$(sgr0) w katalogu $(bold)OBJ$(sgr0)\e[49m"
 	rm -f OBJ/*
-	@echo
-	@echo "$(bold)Usuwanie$(sgr0) katalogu$(bold) OBJ$(sgr0)"
-	@echo
-	rmdir OBJ
+# @echo "$(bold)Usuwanie$(sgr0) katalogu$(bold) OBJ$(sgr0)"
+# rmdir OBJ
 
 clean_exec:
 	rm Program
 
 obj: 
-	@echo "Tworzenie katalogu$(bold) OBJ$(sgr0)"
-	@echo
+	@echo "\e[40mTworzenie katalogu$(bold) OBJ$(sgr0)\e[49m"
 	mkdir OBJ
-	@echo
 	@echo
 
 run: clean_screen go
