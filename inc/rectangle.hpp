@@ -1,6 +1,7 @@
 #pragma once
 #include "vector2d.hpp"
 #include "matrix2x2.hpp"
+#include "gnuplot_link.hpp"
 class Rectangle
 {
 
@@ -15,7 +16,7 @@ class Rectangle
         void moveRectangle(Vector2d vec);
         void setCorner(int i, double x, double y)
         {this->coordinates[i].setCoord(x,y);};
-
+        void rotateRectangleAnimation(double angle, PzG::GnuplotLink link);
 
 };
 

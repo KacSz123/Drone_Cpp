@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <fstream>
 #include <string>
+#include<unistd.h>
 
 #include "gnuplot_link.hpp"
 #include "vector2d.hpp"
@@ -94,7 +95,52 @@ bool WriteToFileExample(Rectangle rect, string filename)
 }
 
 void test();
+void rotate_rect_anim(Rectangle &rect, double angle,PzG::GnuplotLink link)
+{
+       cout<<"siema!!!!!!!!!\n\n";
+       Rectangle tmpRect;
+       tmpRect=rect;
+       if (angle>=0.0)
+              for(int i=0; i<=int(angle);++i)
+                     {
+            {  cout<<"siema 1 !!!!!!!!!\n\n";
+                     tmpRect.rotateRectangle(1.0);
+                     WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
+                            break;
+                     usleep(10000);
 
+                     link.Draw();
+                     cout<<1<<endl;
+                     }
+                     }
+       else  {
+              for(int i=angle; i <= 0;++i)
+                     {
+                     tmpRect.rotateRectangle(-1.0);
+                     WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
+                            break;
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     }
+                     }
+       usleep(10000);
+       rect.rotateRectangle(angle);
+                     WriteToStreamExample(rect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(rect, "data/prostokat.dat"))
+                            cout<<"!!!!!!!!!!!!!\n";
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     usleep(10000);
+}
 int main()
 {
 
@@ -121,30 +167,14 @@ int main()
        //  jako wspolrzedne punktow podajemy tylko x,y.
        //
        link.SetDrawingMode(PzG::DM_2D);
-
        WriteToStreamExample(rect, cout);
        if (!WriteToFileExample(rect, "data/prostokat.dat"))
               return 1;
-       link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
-       cout << "Naciśnij ENTER, aby kontynuowac" << endl;
-       cin.ignore(100000, '\n');
+       link.Draw();
+       sleep(2);
+       rotate_rect_anim(rect,a,link);
+       rotate_rect_anim(rect,-2*a,link);
 
-       //----------------------------------------------------------
-       // Ponownie wypisuje wspolrzedne i rysuje prostokąt w innym miejscu.
-       //
-       rect.rotateRectangle(-45);
-       WriteToStreamExample(rect, cout);
-       if (!WriteToFileExample(rect, "data/prostokat.dat"))
-              return 1;
-       link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
-       getchar();
-
-       Vector2d vec(50,130);
-       rect.moveRectangle(vec);
-       WriteToStreamExample(rect, cout);
-       if (!WriteToFileExample(rect, "data/prostokat.dat"))
-              return 1;
-       link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
        getchar();
 }
 
@@ -182,3 +212,36 @@ void test()
        rect2.rotateRectangle(90.0);
        std::cout << rect2 << std::endl;
 }
+
+
+
+
+/**
+ * 
+ * 
+ * 
+ * 
+ *        WriteToStreamExample(rect, cout);
+       if (!WriteToFileExample(rect, "data/prostokat.dat"))
+              return 1;
+       link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
+       cout << "Naciśnij ENTER, aby kontynuowac" << endl;
+       cin.ignore(100000, '\n');
+
+       //----------------------------------------------------------
+       // Ponownie wypisuje wspolrzedne i rysuje prostokąt w innym miejscu.
+       //
+       rect.rotateRectangle(-45);
+       WriteToStreamExample(rect, cout);
+       if (!WriteToFileExample(rect, "data/prostokat.dat"))
+              return 1;
+       link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
+       getchar();
+
+       Vector2d vec(50,130);
+       rect.moveRectangle(vec);
+       WriteToStreamExample(rect, cout);
+       if (!WriteToFileExample(rect, "data/prostokat.dat"))
+              return 1;
+       link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
+*/

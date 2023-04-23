@@ -7,15 +7,12 @@ public:
 Vector2d();
 Vector2d(double, double);
 void setCoord(double x, double y);
-void setCoord(int i, double val){this->coordinates[i]=val;};
-double const getX();
-double const getY();
-double const getXorY(int i){return this->coordinates[i];};
+inline void setCoord(int i, double val){this->coordinates[i]=val;};
+inline double const getX(){return this->coordinates[0];};
+inline double const getY(){return this->coordinates[1];};
+inline double const getXorY(int i){return this->coordinates[i];};
 
-double operator[](int i)
-{
-    return this->coordinates[i];
-}
+inline double operator[](int i){return this->coordinates[i];  };
 }; 
 
 std::ostream& operator << (std::ostream&, Vector2d );

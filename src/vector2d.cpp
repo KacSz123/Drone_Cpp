@@ -10,14 +10,12 @@ void Vector2d::setCoord(double x,double y)
 }
 
 
-double const Vector2d::getX()
-{
-    return this->coordinates[0];
-}
-double const Vector2d::getY()
-{
-    return this->coordinates[1];
-}
+// double const Vector2d::getX()
+// {return this->coordinates[0];}
+// double const Vector2d::getY()
+// {
+//     return this->coordinates[1];
+// }
 Vector2d::Vector2d()
 {
     this->coordinates[0]=0;
