@@ -14,8 +14,7 @@ class Rectangle
         void rotateRectangle(double angle);
         void setCorner(int i, Vector2d vec){this->coordinates[i]=vec;};
         void moveRectangle(Vector2d vec);
-        void setCorner(int i, double x, double y)
-        {this->coordinates[i].setCoord(x,y);};
+        void setCorner(int i, double x, double y){this->coordinates[i].setCoord(x,y);};
         void rotateRectangleAnimation(double angle, PzG::GnuplotLink link);
 
 };
