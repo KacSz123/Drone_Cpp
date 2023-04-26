@@ -2,23 +2,23 @@
 #include "vector2d.hpp"
 #include "matrix2x2.hpp"
 #include "gnuplot_link.hpp"
-class Rectangle
+class Cuboid
 {
 
     private:
         Vector2d<double, 2> coordinates[4]; //leftUp, LeftDown, RightDown, LeftUp
     public:
-        Rectangle();
-        Rectangle(double startX, double startY, double lenX, double lenY);
+        Cuboid();
+        Cuboid(double startX, double startY, double lenX, double lenY);
         Vector2d<double, 2> const getCorner(int i) {return this->coordinates[i];};
-        void rotateRectangle(double angle);
+        void rotateCuboid(double angle);
         void setCorner(int i, Vector2d<double, 2> vec){this->coordinates[i]=vec;};
-        void moveRectangle(Vector2d<double, 2> vec);
+        void moveCuboid(Vector2d<double, 2> vec);
         void setCorner(int i, double x, double y){this->coordinates[i].setCoord(x,y);};
-        void rotateRectangleAnimation(double angle, PzG::GnuplotLink link);
+        void rotateCuboidAnimation(double angle, PzG::GnuplotLink link);
 
 };
 
 
-std::ostream& operator << (std::ostream&, Rectangle);
-Rectangle& operator += (Rectangle& rect, Vector2d<double, 2> vec);
+std::ostream& operator << (std::ostream&, Cuboid);
+Cuboid& operator += (Cuboid& rect, Vector2d<double, 2> vec);

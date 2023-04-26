@@ -1,9 +1,9 @@
 
 #include<iostream>
-#include "rectangle.hpp"
+#include "cuboid.hpp"
 #include <cmath>
 
-Rectangle::Rectangle()
+Cuboid::Cuboid()
 {
     Vector2d<double, 2> vec;
     for (int i=0; i<4; ++i)
@@ -12,7 +12,7 @@ Rectangle::Rectangle()
     }
 }
 
-Rectangle::Rectangle(double startX, double startY, double lenX, double lenY)
+Cuboid::Cuboid(double startX, double startY, double lenX, double lenY)
 {
     this->coordinates[0].setCoord(startX, startY);
     this->coordinates[1].setCoord(startX, startY-lenY);
@@ -22,7 +22,7 @@ Rectangle::Rectangle(double startX, double startY, double lenX, double lenY)
 }
 
 
-std::ostream& operator << (std::ostream& ostrm, Rectangle rect)
+std::ostream& operator << (std::ostream& ostrm, Cuboid rect)
 {
     ostrm << rect.getCorner(0)<<"\n"<< rect.getCorner(1)
     <<"\n"<< rect.getCorner(2)<<"\n"<< rect.getCorner(3)<<"\n";
@@ -31,10 +31,10 @@ std::ostream& operator << (std::ostream& ostrm, Rectangle rect)
 
 
 
-void Rectangle :: rotateRectangle(double angle)
+void Cuboid :: rotateCuboid(double angle)
 {   
     double radians = angle*(M_PI/180.0);
-    Matrix2x2 m(cos(radians), -sin(radians),
+    Matrix2x2<double, 2> m(cos(radians), -sin(radians),
                 sin(radians), cos(radians));
 
     for(int i=0; i<4; ++i)
@@ -45,7 +45,7 @@ void Rectangle :: rotateRectangle(double angle)
 }
 
 
-void Rectangle :: moveRectangle(Vector2d<double, 2> vec)
+void Cuboid :: moveCuboid(Vector2d<double, 2> vec)
 {
     for(int i=0; i<4;++i)
     {
@@ -55,7 +55,7 @@ void Rectangle :: moveRectangle(Vector2d<double, 2> vec)
 
 
 
-Rectangle& operator += (Rectangle& rect, Vector2d<double, 2> vec)
+Cuboid& operator += (Cuboid& rect, Vector2d<double, 2> vec)
 {
     for(int i=0; i<4;++i)
     {

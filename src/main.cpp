@@ -7,7 +7,7 @@
 #include "gnuplot_link.hpp"
 #include "vector2d.hpp"
 #include "matrix2x2.hpp"
-#include "rectangle.hpp"
+#include "cuboid.hpp"
 
 using namespace std;
 
@@ -35,7 +35,7 @@ const int kLongerEdgesLength = 150;
  * \retval true - gdy operacja zapisu powiodła się,
  * \retval false - w przypadku przeciwnym.
  */
-void WriteToStreamExample(Rectangle rect, ostream &output_stream)
+void WriteToStreamExample(Cuboid rect, ostream &output_stream)
 {
        //---------------------------------------------------------------
        // To tylko przyklad !!!
@@ -76,7 +76,7 @@ void WriteToStreamExample(Rectangle rect, ostream &output_stream)
  * \retval true - gdy operacja zapisu powiodła się,
  * \retval false - w przypadku przeciwnym.
  */
-bool WriteToFileExample(Rectangle rect, string filename)
+bool WriteToFileExample(Cuboid rect, string filename)
 {
        ofstream file_stream;
 
@@ -95,16 +95,16 @@ bool WriteToFileExample(Rectangle rect, string filename)
 }
 
 void test();
-void rotate_rect_anim(Rectangle &rect, double angle,PzG::GnuplotLink link)
+void rotate_rect_anim(Cuboid &rect, double angle,PzG::GnuplotLink link)
 {
        cout<<"siema!!!!!!!!!\n\n";
-       Rectangle tmpRect;
+       Cuboid tmpRect;
        tmpRect=rect;
        if (angle>=0.0)
               for(int i=0; i<=int(angle);++i)
                      {
             {  cout<<"siema 1 !!!!!!!!!\n\n";
-                     tmpRect.rotateRectangle(1.0);
+                     tmpRect.rotateCuboid(1.0);
                      WriteToStreamExample(tmpRect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
@@ -118,7 +118,7 @@ void rotate_rect_anim(Rectangle &rect, double angle,PzG::GnuplotLink link)
        else  {
               for(int i=angle; i <= 0;++i)
                      {
-                     tmpRect.rotateRectangle(-1.0);
+                     tmpRect.rotateCuboid(-1.0);
                      WriteToStreamExample(tmpRect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
@@ -130,7 +130,7 @@ void rotate_rect_anim(Rectangle &rect, double angle,PzG::GnuplotLink link)
                      }
                      }
        usleep(10000);
-       rect.rotateRectangle(angle);
+       rect.rotateCuboid(angle);
                      WriteToStreamExample(rect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(rect, "data/prostokat.dat"))
@@ -145,7 +145,7 @@ int main()
 {
 
        double a = 50.0;
-       Rectangle rect(-a, 5 * a, 2 * a, 5 * a); // To tylko przykladowe definicje zmiennej
+       Cuboid rect(-a, 5 * a, 2 * a, 5 * a); // To tylko przykladowe definicje zmiennej
        PzG::GnuplotLink link;                   // Ta zmienna jest potrzebna do wizualizacji
                                                 // rysunku prostokata
 
@@ -182,17 +182,17 @@ void test()
 {
      
        Vector2d<double, 2> vec1(2.0, 2.0), vec2(1.0, 1.0);
-       Rectangle rect(0.0, 0.0, 3.0, 5.0), rect2(0.0, 0.0, 4.0, 6.0);
+       Cuboid rect(0.0, 0.0, 3.0, 5.0), rect2(0.0, 0.0, 4.0, 6.0);
        std::cout << vec1 << "\n"
                  << vec2 << "\n"
                  << rect << std::endl;
-       rect.moveRectangle(vec2);
+       rect.moveCuboid(vec2);
        std::cout << rect << std::endl;
        rect += vec1;
        std::cout << rect << std::endl;
        std::cout << "----------------------------\n";
        std::cout << rect2 << std::endl;
-       rect2.rotateRectangle(90.0);
+       rect2.rotateCuboid(90.0);
        std::cout << rect2 << std::endl;
 }
 
@@ -214,7 +214,7 @@ void test()
        //----------------------------------------------------------
        // Ponownie wypisuje wspolrzedne i rysuje prostokąt w innym miejscu.
        //
-       rect.rotateRectangle(-45);
+       rect.rotateCuboid(-45);
        WriteToStreamExample(rect, cout);
        if (!WriteToFileExample(rect, "data/prostokat.dat"))
               return 1;
@@ -222,7 +222,7 @@ void test()
        getchar();
 
        Vector2d vec(50,130);
-       rect.moveRectangle(vec);
+       rect.moveCuboid(vec);
        WriteToStreamExample(rect, cout);
        if (!WriteToFileExample(rect, "data/prostokat.dat"))
               return 1;
