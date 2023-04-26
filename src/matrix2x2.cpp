@@ -42,9 +42,9 @@ std::ostream& operator << (std::ostream& ostrm,Matrix2x2 matrixx)
 }
 
 
-Vector2d operator * (Matrix2x2 m, Vector2d v)
+Vector2d<double, 2> operator * (Matrix2x2 m, Vector2d<double, 2> v)
 {
-    Vector2d result;
+    Vector2d<double, 2> result;
     for (int i =0; i<2; ++i)
     {
         for(int j=0; j<2;++j)

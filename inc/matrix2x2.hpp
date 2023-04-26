@@ -32,4 +32,4 @@ double operator ()(int i, int j )
 
 std::ostream& operator << (std::ostream& ostrm,Matrix2x2 const matrixx);
 
-Vector2d operator * (Matrix2x2 m, Vector2d v);
+Vector2d<double, 2> operator * (Matrix2x2 m, Vector2d<double, 2> v);

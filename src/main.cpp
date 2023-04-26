@@ -181,7 +181,7 @@ int main()
 void test()
 {
      
-       Vector2d vec1(2.0, 2.0), vec2(1.0, 1.0);
+       Vector2d<double, 2> vec1(2.0, 2.0), vec2(1.0, 1.0);
        Rectangle rect(0.0, 0.0, 3.0, 5.0), rect2(0.0, 0.0, 4.0, 6.0);
        std::cout << vec1 << "\n"
                  << vec2 << "\n"

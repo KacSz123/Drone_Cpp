@@ -5,7 +5,7 @@
 
 Rectangle::Rectangle()
 {
-    Vector2d vec;
+    Vector2d<double, 2> vec;
     for (int i=0; i<4; ++i)
     {
         this->coordinates[i]=vec;
@@ -45,7 +45,7 @@ void Rectangle :: rotateRectangle(double angle)
 }
 
 
-void Rectangle :: moveRectangle(Vector2d vec)
+void Rectangle :: moveRectangle(Vector2d<double, 2> vec)
 {
     for(int i=0; i<4;++i)
     {
@@ -55,7 +55,7 @@ void Rectangle :: moveRectangle(Vector2d vec)
 
 
 
-Rectangle& operator += (Rectangle& rect, Vector2d vec)
+Rectangle& operator += (Rectangle& rect, Vector2d<double, 2> vec)
 {
     for(int i=0; i<4;++i)
     {
