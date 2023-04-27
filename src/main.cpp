@@ -241,13 +241,12 @@ void moveC(Cuboid &rect, double xv,PzG::GnuplotLink link)
 
        Cuboid tmpRect;
        tmpRect=rect;
-       Vector2d<double,3>  v1,vstep;
-       v1.setCoords(xv,0,0);
-       vstep.setCoords(1.0,0,0);
-              for(int i=0; i<=int(xv);++i)
+
+       if(xv>0)
+              {for(int i=0; i<=int(xv);++i)
                      {
                      {
-                     tmpRect.moveCuboidLocal(vstep);
+                     tmpRect.moveCuboidForward(1);
                      WriteToStreamExample(tmpRect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
@@ -257,10 +256,27 @@ void moveC(Cuboid &rect, double xv,PzG::GnuplotLink link)
                      link.Draw();
                      // cout<<1<<endl;
                      }
+                     }}
+       else
+       {
+              for(int i=int(xv); i<=0;++i)
+                     {
+                     
+                     tmpRect.moveCuboidForward(-1);
+                     WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
+                            break;
+                     usleep(10000);
+
+                     link.Draw();
+                     // cout<<1<<endl;
+                     
                      }
+       }
 
        usleep(10000);
-       rect.moveCuboidLocal(v1);
+       rect.moveCuboidForward(xv);
                      WriteToStreamExample(rect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(rect, "data/prostokat.dat"))
@@ -272,41 +288,6 @@ void moveC(Cuboid &rect, double xv,PzG::GnuplotLink link)
                      usleep(10000);
 }
 
-void moveCG(Cuboid &rect, double xv,PzG::GnuplotLink link)
-{
-
-       Cuboid tmpRect;
-       tmpRect=rect;
-       Vector2d<double,3>  v1,vstep;
-       v1.setCoords(xv,0,0);
-       vstep.setCoords(1.0,0,0);
-              for(int i=0; i<=int(xv);++i)
-                     {
-                     {
-                     tmpRect.moveCuboidGlobal(vstep);
-                     WriteToStreamExample(tmpRect, cout);
-                     usleep(10000);
-                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
-                            break;
-                     usleep(10000);
-
-                     link.Draw();
-                     // cout<<1<<endl;
-                     }
-                     }
-
-       usleep(10000);
-       rect.moveCuboidGlobal(v1);
-                     WriteToStreamExample(rect, cout);
-                     usleep(10000);
-                     if (!WriteToFileExample(rect, "data/prostokat.dat"))
-                            cout<<"!!!!!!!!!!!!!\n";
-                     usleep(10000);
-
-                     link.Draw();
-                     cout<<1<<endl;
-                     usleep(10000);
-}
 int main()
 {
        Vector2d<double, 3> vMid;
@@ -338,97 +319,34 @@ int main()
        if (!WriteToFileExample(rect, "data/prostokat.dat"))
               return 1;
        link.Draw();
-        sleep(2);
-       rotate_rect_animZ(rect,50,link);
+
+
        sleep(1);
-       moveCG(rect, 70,link);
+       
+       moveC(rect, 100,link);
+
        sleep(1);
-       moveC(rect, 50,link);
-       // rotate_rect_animY(rect,50,link);
-       // sleep(1);
-       // rotate_rect_animX(rect,50,link);
-       // Matrix2x2<double, 3>  m1,m2,m3;
-       // m1(0,0)=2;
-       // m1(0,1)=2;
-       // m1(0,2)=2;
+       
+       moveC(rect, -100,link);
+       rotate_rect_animZ(rect,90,link);
+       
+       // cout<<"-------------\n"<<rect.getMidPoint()<<"\n-------------\n";
+       
+       sleep(1);
+       
+       moveC(rect, 100,link);
 
-       // m1(1,0)=3;
-       // m1(1,1)=3;
-       // m1(1,2)=3;
+       sleep(1);
+       
+       moveC(rect, -100,link);
+       sleep(1);
+       
+       rotate_rect_animZ(rect,270,link);
+       sleep(1);
+       moveC(rect, 100,link);
+       sleep(1);
 
-       // m1(2,0)=4;
-       // m1(2,1)=2;
-       // m1(2,2)=5;
-
-
-       // m2(0,0)=3;
-       // m2(0,1)=3;
-       // m2(0,2)=3;
-
-       // m2(1,0)=2;
-       // m2(1,1)=2;
-       // m2(1,2)=3;
-
-       // m2(2,0)=1;
-       // m2(2,1)=1;
-       // m2(2,2)=3;
-       // m3 = m1*m2;
-       // // Vector2d<double,3>  vec;
-       // // vec.setCoords(3,2,1);
-       // // vec = m1*vec;
-       //  cout<<m3;
-       // rotate_rect_anim(rect,-2*a,link);
 
        getchar();
 }
 
-void test()
-{
-     
-       // Vector2d<double, 2> vec1(2.0, 2.0), vec2(1.0, 1.0);
-       // Cuboid rect(0.0, 0.0, 3.0, 5.0), rect2(0.0, 0.0, 4.0, 6.0);
-       // std::cout << vec1 << "\n"
-       //           << vec2 << "\n"
-       //           << rect << std::endl;
-       // rect.moveCuboid(vec2);
-       // std::cout << rect << std::endl;
-       // rect += vec1;
-       // std::cout << rect << std::endl;
-       // std::cout << "----------------------------\n";
-       // std::cout << rect2 << std::endl;
-       // rect2.rotateCuboid(90.0);
-       // std::cout << rect2 << std::endl;
-}
-
-
-
-
-/**
- * 
- * 
- * 
- * 
- *        WriteToStreamExample(rect, cout);
-       if (!WriteToFileExample(rect, "data/prostokat.dat"))
-              return 1;
-       link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
-       cout << "Naciśnij ENTER, aby kontynuowac" << endl;
-       cin.ignore(100000, '\n');
-
-       //----------------------------------------------------------
-       // Ponownie wypisuje wspolrzedne i rysuje prostokąt w innym miejscu.
-       //
-       rect.rotateCuboid(-45);
-       WriteToStreamExample(rect, cout);
-       if (!WriteToFileExample(rect, "data/prostokat.dat"))
-              return 1;
-       link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
-       getchar();
-
-       Vector2d vec(50,130);
-       rect.moveCuboid(vec);
-       WriteToStreamExample(rect, cout);
-       if (!WriteToFileExample(rect, "data/prostokat.dat"))
-              return 1;
-       link.Draw(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
-*/

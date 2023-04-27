@@ -15,7 +15,8 @@ inline double const getX(){return this->coordinates[0];};
 inline double const getY(){return this->coordinates[1];};
 inline double const getXorY(int i){return this->coordinates[i];};
 inline T getCoord(int i){return this->coordinates[i];};
-inline double operator[](int i){return this->coordinates[i];  };
+inline double& operator[](int i){return this->coordinates[i];  };
+
 }; 
 template<typename T, unsigned int Size>
 void Vector2d<T,Size>::setCoord(double x,double y)
@@ -51,6 +52,15 @@ Vector2d<T, Size> operator + (Vector2d<T,Size> vec1, Vector2d<T,Size> vec2)
         wynik.setCoord(i, vec1.getCoord(i)+vec2.getCoord(i));
     return wynik;
 }
+
+template<typename T, unsigned int Size>
+Vector2d<T, Size> operator - (Vector2d<T,Size> vec1, Vector2d<T,Size> vec2)
+{
+    Vector2d<T, Size> wynik;
+    for(int i =0; i<int(Size); ++i)
+        wynik.setCoord(i, vec1.getCoord(i)-vec2.getCoord(i));
+    return wynik;
+}
 template<typename T, unsigned int Size>
 std::ostream& operator << (std::ostream& ostrm, Vector2d<T,Size> v)
 {
@@ -63,5 +73,21 @@ Vector2d<T,Size>& operator += (Vector2d<T,Size>& vec1, Vector2d<T,Size> vec2)
 {
     for(int i =0; i<int(Size); ++i)
         vec1.setCoord(i, vec1.getCoord(i)+vec2.getCoord(i));
+    return vec1;
+}
+
+template<typename T, unsigned int Size>
+Vector2d<T,Size>& operator -= (Vector2d<T,Size>& vec1, Vector2d<T,Size> vec2)
+{
+    for(int i =0; i<int(Size); ++i)
+        vec1.setCoord(i, vec1.getCoord(i)-vec2.getCoord(i));
+    return vec1;
+}
+
+template<typename T, unsigned int Size>
+Vector2d<T,Size>& operator * (Vector2d<T,Size>& vec1, double a)
+{
+    for(int i =0; i<int(Size); ++i)
+        vec1.setCoord(i, vec1.getCoord(i)*a);
     return vec1;
 }

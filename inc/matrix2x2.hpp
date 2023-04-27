@@ -193,7 +193,21 @@ Matrix2x2<T,Size> operator*(Matrix2x2<T, Size> m1, Matrix2x2<T, Size> m2)
     return result;
 }
 
+template <typename T, unsigned int Size>
+Matrix2x2<T,Size> operator+(Matrix2x2<T, Size> m1, Matrix2x2<T, Size> m2)
+{
+    Matrix2x2<T, Size> result;
+    // int a =0;
+    for (int i = 0; i < int(Size); ++i)
+    {
+        for (int j = 0; j < int(Size); ++j)
+        {
+                result(i,j)=m1(i,j)+m2(i,j);
+        }
+    }
 
+    return result;
+}
 template <typename T, unsigned int Size>
 bool operator==(Matrix2x2<T, Size> m1, Matrix2x2<T, Size> m2)
 {
