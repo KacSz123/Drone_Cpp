@@ -328,7 +328,7 @@ int main()
        sleep(1);
        
        moveC(rect, -100,link);
-       rotate_rect_animZ(rect,90,link);
+       rotate_rect_animY(rect,90,link);
        
        // cout<<"-------------\n"<<rect.getMidPoint()<<"\n-------------\n";
        

@@ -95,15 +95,11 @@ void Cuboid ::rotateZaxis(double angle)
     m.getZrotationMatrix(radians);
     this->orientation = (this->orientation * m);
     
-    std::cout<<"-------------------\n"<<this->midPoint<<"\n-------------------\n";
 
     for (int i = 0; i < 8; ++i)
     {   
-        std::cout<<"-------------------\n"<<this->coordinates[i]<<"\n-------------------\n";
         this->coordinates[i] -=this->midPoint;    
-        std::cout<<"-------------------\n"<<this->coordinates[i]<<"\n-------------------\n";
         this->coordinates[i] = m * this->coordinates[i];
-        std::cout<<"-------------------\n"<<this->coordinates[i]<<"\n-------------------\n";
         this->coordinates[i] += this->midPoint;
     }
 
