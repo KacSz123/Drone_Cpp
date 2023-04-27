@@ -5,39 +5,66 @@
 
 Cuboid::Cuboid()
 {
-    Vector2d<double, 2> vec;
-    for (int i=0; i<4; ++i)
+    Vector2d<double, 3> vec;
+    for (int i=0; i<8; ++i)
     {
         this->coordinates[i]=vec;
     }
 }
 
-Cuboid::Cuboid(double startX, double startY, double lenX, double lenY)
+Cuboid::Cuboid(Vector2d<double, 3> midPt, double lenX, double lenY, double lexZ)
 {
-    this->coordinates[0].setCoord(startX, startY);
-    this->coordinates[1].setCoord(startX, startY-lenY);
-    this->coordinates[2].setCoord(startX+lenX, startY-lenY);
-    this->coordinates[3].setCoord(startX+lenX, startY);
+
+    this->midPoint=midPt;
+    // this->coordinates[0].setCoord(startX, startY);
+    // this->coordinates[1].setCoord(startX, startY-lenY);
+    // this->coordinates[2].setCoord(startX+lenX, startY-lenY);
+    // this->coordinates[3].setCoord(startX+lenX, startY);
 
 }
 
 
 std::ostream& operator << (std::ostream& ostrm, Cuboid rect)
 {
-    ostrm << rect.getCorner(0)<<"\n"<< rect.getCorner(1)
-    <<"\n"<< rect.getCorner(2)<<"\n"<< rect.getCorner(3)<<"\n";
+
+    for (int i  = 0; i<8; ++i)
+    ostrm << rect.getCorner(i)<<"\n";
+
     return ostrm;
 }
 
 
 
-void Cuboid :: rotateCuboid(double angle)
+void Cuboid :: rotateXaxis(double angle)
 {   
     double radians = angle*(M_PI/180.0);
-    Matrix2x2<double, 2> m(cos(radians), -sin(radians),
-                sin(radians), cos(radians));
+    Matrix2x2<double, 3> m;
+    m.getXrotationMatrix(angle);
+    for(int i=0; i<8; ++i)
+    {
+        this->coordinates[i] = m*this->coordinates[i];
+    }
 
-    for(int i=0; i<4; ++i)
+}
+
+void Cuboid :: rotateYaxis(double angle)
+{   
+    double radians = angle*(M_PI/180.0);
+    Matrix2x2<double, 3> m;
+    m.getYrotationMatrix(angle);
+    for(int i=0; i<8; ++i)
+    {
+        this->coordinates[i] = m*this->coordinates[i];
+    }
+
+}
+
+void Cuboid :: rotateXaxis(double angle)
+{   
+    double radians = angle*(M_PI/180.0);
+    Matrix2x2<double, 3> m;
+    m.getYrotationMatrix(angle);
+    for(int i=0; i<8; ++i)
     {
         this->coordinates[i] = m*this->coordinates[i];
     }
@@ -45,9 +72,9 @@ void Cuboid :: rotateCuboid(double angle)
 }
 
 
-void Cuboid :: moveCuboid(Vector2d<double, 2> vec)
+void Cuboid :: moveCuboid(Vector2d<double, 3> vec)
 {
-    for(int i=0; i<4;++i)
+    for(int i=0; i<8;++i)
     {
         this->setCorner(i, this->getCorner(i)+vec);
     }
@@ -55,9 +82,9 @@ void Cuboid :: moveCuboid(Vector2d<double, 2> vec)
 
 
 
-Cuboid& operator += (Cuboid& rect, Vector2d<double, 2> vec)
+Cuboid& operator += (Cuboid& rect, Vector2d<double, 3> vec)
 {
-    for(int i=0; i<4;++i)
+    for(int i=0; i<8;++i)
     {
         rect.setCorner(i, rect.getCorner(i)+vec);
     }

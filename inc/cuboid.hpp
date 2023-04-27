@@ -6,19 +6,22 @@ class Cuboid
 {
 
     private:
-        Vector2d<double, 2> coordinates[4]; //leftUp, LeftDown, RightDown, LeftUp
+        Vector2d<double, 3> coordinates[8]; //leftUp, LeftDown, RightDown, LeftUp
+        Vector2d<double, 3> midPoint;
     public:
         Cuboid();
-        Cuboid(double startX, double startY, double lenX, double lenY);
-        Vector2d<double, 2> const getCorner(int i) {return this->coordinates[i];};
-        void rotateCuboid(double angle);
-        void setCorner(int i, Vector2d<double, 2> vec){this->coordinates[i]=vec;};
-        void moveCuboid(Vector2d<double, 2> vec);
-        void setCorner(int i, double x, double y){this->coordinates[i].setCoord(x,y);};
-        void rotateCuboidAnimation(double angle, PzG::GnuplotLink link);
+        Cuboid(Vector2d<double, 3>, double, double, double);
+        Vector2d<double, 3> const getCorner(int i) {return this->coordinates[i];};
+        void rotateXaxis(double angle);
+        void rotateYaxis(double angle);
+        void rotateZaxis(double angle);
+        void setCorner(int i, Vector2d<double, 3> vec){this->coordinates[i]=vec;};
+        void moveCuboid(Vector2d<double, 3> vec);
+        void setCorner(int i, Vector2d<double,3> vec){this->coordinates[i]=vec;};
+        
 
 };
 
 
 std::ostream& operator << (std::ostream&, Cuboid);
-Cuboid& operator += (Cuboid& rect, Vector2d<double, 2> vec);
+Cuboid& operator += (Cuboid& rect, Vector2d<double, 3> vec);
