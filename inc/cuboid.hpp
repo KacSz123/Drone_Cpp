@@ -17,7 +17,7 @@ class Cuboid
         void rotateZaxis(double angle);
         void setCorner(int i, Vector2d<double, 3> vec){this->coordinates[i]=vec;};
         void moveCuboid(Vector2d<double, 3> vec);
-        void setCorner(int i, Vector2d<double,3> vec){this->coordinates[i]=vec;};
+        // void setCorner(int i, Vector2d<double,3> vec){this->coordinates[i]=vec;};
         
 
 };

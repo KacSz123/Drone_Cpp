@@ -4,11 +4,12 @@
 template<typename T, unsigned int Size>
 class Vector2d{
 private:
-T coordinates[2];
+T coordinates[Size];
 public:
 Vector2d();
 Vector2d(double, double);
 void setCoord(double x, double y);
+void setCoords(double x, double y, double z) {this->coordinates[0]=x;this->coordinates[1]=y;this->coordinates[2]=z;};
 void setCoord(int i, T val){ this->coordinates[i]=val;};
 inline double const getX(){return this->coordinates[0];};
 inline double const getY(){return this->coordinates[1];};

@@ -59,7 +59,8 @@ void WriteToStreamExample(Cuboid rect, ostream &output_stream)
        //          << setw(16) << fixed << setprecision(10) << y4+offset << endl;
        //   output_stream << setw(16) << fixed << setprecision(10) << x1+offset
        //          << setw(16) << fixed << setprecision(10) << y1+offset << endl;
-       output_stream << rect << rect.getCorner(0);
+       output_stream << rect << rect.getCorner(0)<<"\n"<<rect.getCorner(1);
+       // output_stream <<  rect.getCorner(0)<<"\n"<<  rect.getCorner(1)<<"\n"<<  rect.getCorner(3)<<"\n"<<  rect.getCorner(2)<<"\n"<<  rect.getCorner(0)<<"\n";
        // Jeszcze raz zapisujemy pierwszy punkt,
        // aby gnuplot narysowal zamkniętą linię.
 }
@@ -95,7 +96,8 @@ bool WriteToFileExample(Cuboid rect, string filename)
 }
 
 void test();
-void rotate_rect_anim(Cuboid &rect, double angle,PzG::GnuplotLink link)
+
+void rotate_rect_animY(Cuboid &rect, double angle,PzG::GnuplotLink link)
 {
        cout<<"siema!!!!!!!!!\n\n";
        Cuboid tmpRect;
@@ -104,7 +106,7 @@ void rotate_rect_anim(Cuboid &rect, double angle,PzG::GnuplotLink link)
               for(int i=0; i<=int(angle);++i)
                      {
             {  cout<<"siema 1 !!!!!!!!!\n\n";
-                     tmpRect.rotateCuboid(1.0);
+                     tmpRect.rotateYaxis(1.0);
                      WriteToStreamExample(tmpRect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
@@ -118,7 +120,7 @@ void rotate_rect_anim(Cuboid &rect, double angle,PzG::GnuplotLink link)
        else  {
               for(int i=angle; i <= 0;++i)
                      {
-                     tmpRect.rotateCuboid(-1.0);
+                     tmpRect.rotateYaxis(-1.0);
                      WriteToStreamExample(tmpRect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
@@ -130,7 +132,100 @@ void rotate_rect_anim(Cuboid &rect, double angle,PzG::GnuplotLink link)
                      }
                      }
        usleep(10000);
-       rect.rotateCuboid(angle);
+       rect.rotateYaxis(angle);
+                     WriteToStreamExample(rect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(rect, "data/prostokat.dat"))
+                            cout<<"!!!!!!!!!!!!!\n";
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     usleep(10000);
+}
+
+void rotate_rect_animX(Cuboid &rect, double angle,PzG::GnuplotLink link)
+{
+       cout<<"siema!!!!!!!!!\n\n";
+       Cuboid tmpRect;
+       tmpRect=rect;
+       if (angle>=0.0)
+              for(int i=0; i<=int(angle);++i)
+                     {
+            {  cout<<"siema 1 !!!!!!!!!\n\n";
+                     tmpRect.rotateXaxis(1.0);
+                     WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
+                            break;
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     }
+                     }
+       else  {
+              for(int i=angle; i <= 0;++i)
+                     {
+                     tmpRect.rotateXaxis(-1.0);
+                     WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
+                            break;
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     }
+                     }
+       usleep(10000);
+       rect.rotateXaxis(angle);
+                     WriteToStreamExample(rect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(rect, "data/prostokat.dat"))
+                            cout<<"!!!!!!!!!!!!!\n";
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     usleep(10000);
+}
+void rotate_rect_animZ(Cuboid &rect, double angle,PzG::GnuplotLink link)
+{
+       cout<<"siema!!!!!!!!!\n\n";
+       Cuboid tmpRect;
+       tmpRect=rect;
+       if (angle>=0.0)
+              for(int i=0; i<=int(angle);++i)
+                     {
+            {  cout<<"siema 1 !!!!!!!!!\n\n";
+                     tmpRect.rotateZaxis(1.0);
+                     WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
+                            break;
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     }
+                     }
+       else  {
+              for(int i=angle; i <= 0;++i)
+                     {
+                     tmpRect.rotateZaxis(-1.0);
+                     WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
+                            break;
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     }
+                     }
+       usleep(10000);
+       rect.rotateZaxis(angle);
                      WriteToStreamExample(rect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(rect, "data/prostokat.dat"))
@@ -143,9 +238,10 @@ void rotate_rect_anim(Cuboid &rect, double angle,PzG::GnuplotLink link)
 }
 int main()
 {
-
-       double a = 50.0;
-       Cuboid rect(-a, 5 * a, 2 * a, 5 * a); // To tylko przykladowe definicje zmiennej
+       Vector2d<double, 3> vMid;
+       vMid.setCoords(0.0,0.0,0.0);
+       // double a = 50.0;
+       Cuboid rect(vMid, 100.0, 70.0, 60.0); // To tylko przykladowe definicje zmiennej
        PzG::GnuplotLink link;                   // Ta zmienna jest potrzebna do wizualizacji
                                                 // rysunku prostokata
 
@@ -166,14 +262,34 @@ int main()
        //  znajduje się na wspólnej płaszczyźnie. Z tego powodu powoduj
        //  jako wspolrzedne punktow podajemy tylko x,y.
        //
-       link.SetDrawingMode(PzG::DM_2D);
+       link.SetDrawingMode(PzG::DM_3D);
        WriteToStreamExample(rect, cout);
        if (!WriteToFileExample(rect, "data/prostokat.dat"))
               return 1;
        link.Draw();
-       sleep(2);
-       rotate_rect_anim(rect,a,link);
-       rotate_rect_anim(rect,-2*a,link);
+        sleep(2);
+       rotate_rect_animZ(rect,50,link);
+       sleep(1);
+       rotate_rect_animY(rect,50,link);
+       sleep(1);
+       rotate_rect_animX(rect,50,link);
+       // Matrix2x2<double, 3>  m1;
+       // m1(0,0)=2;
+       // m1(0,1)=2;
+       // m1(0,2)=2;
+
+       // m1(1,0)=3;
+       // m1(1,1)=3;
+       // m1(1,2)=3;
+
+       // m1(2,0)=4;
+       // m1(2,1)=2;
+       // m1(2,2)=5;
+       // Vector2d<double,3>  vec;
+       // vec.setCoords(3,2,1);
+       // vec = m1*vec;
+       // cout<<vec;
+       // rotate_rect_anim(rect,-2*a,link);
 
        getchar();
 }
@@ -181,19 +297,19 @@ int main()
 void test()
 {
      
-       Vector2d<double, 2> vec1(2.0, 2.0), vec2(1.0, 1.0);
-       Cuboid rect(0.0, 0.0, 3.0, 5.0), rect2(0.0, 0.0, 4.0, 6.0);
-       std::cout << vec1 << "\n"
-                 << vec2 << "\n"
-                 << rect << std::endl;
-       rect.moveCuboid(vec2);
-       std::cout << rect << std::endl;
-       rect += vec1;
-       std::cout << rect << std::endl;
-       std::cout << "----------------------------\n";
-       std::cout << rect2 << std::endl;
-       rect2.rotateCuboid(90.0);
-       std::cout << rect2 << std::endl;
+       // Vector2d<double, 2> vec1(2.0, 2.0), vec2(1.0, 1.0);
+       // Cuboid rect(0.0, 0.0, 3.0, 5.0), rect2(0.0, 0.0, 4.0, 6.0);
+       // std::cout << vec1 << "\n"
+       //           << vec2 << "\n"
+       //           << rect << std::endl;
+       // rect.moveCuboid(vec2);
+       // std::cout << rect << std::endl;
+       // rect += vec1;
+       // std::cout << rect << std::endl;
+       // std::cout << "----------------------------\n";
+       // std::cout << rect2 << std::endl;
+       // rect2.rotateCuboid(90.0);
+       // std::cout << rect2 << std::endl;
 }
 
 
