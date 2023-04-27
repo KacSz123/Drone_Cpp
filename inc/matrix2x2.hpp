@@ -37,6 +37,7 @@ public:
     {
         return this->matrix[i][j];
     }
+
 };
 template <typename T, unsigned int Size>
 void Matrix2x2<T, Size>::getXrotationMatrix(const double angle)
@@ -60,7 +61,7 @@ void Matrix2x2<T, Size>::getXrotationMatrix(const double angle)
     {
 
         this->matrix[0][0] = cos(angle);
-        this->matrix[0][1] = -sin(angle);
+        this->matrix[0][1] = sin(angle);
 
         this->matrix[1][0] = sin(angle);
         this->matrix[1][1] = cos(angle);
@@ -74,13 +75,13 @@ void Matrix2x2<T, Size>::getYrotationMatrix(const double angle)
 
         this->matrix[0][0] = cos(angle);
         this->matrix[0][1] = 0;
-        this->matrix[0][2] = -sin(angle);
+        this->matrix[0][2] = sin(angle);
 
         this->matrix[1][0] = 0;
         this->matrix[1][1] = 1;
         this->matrix[1][2] = 0;
 
-        this->matrix[2][0] = sin(angle);
+        this->matrix[2][0] = -sin(angle);
         this->matrix[2][1] = 0;
         this->matrix[2][2] = cos(angle);
     }
@@ -147,12 +148,12 @@ Matrix2x2<T, Size>::Matrix2x2(double a11, double a12, double a21, double a22)
 template <typename T, unsigned int Size>
 std::ostream &operator<<(std::ostream &ostrm, Matrix2x2<T, Size> matrixx)
 {
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < int(Size); ++i)
     {
         ostrm << "| ";
-        for (int j = 0; j < 2; ++j)
+        for (int j = 0; j <int(Size); ++j)
         {
-            ostrm << matrixx.getValue(i, j) << " ";
+            ostrm << matrixx(i,j) << " ";
         }
         ostrm << "|";
         ostrm << std::endl;
@@ -175,3 +176,55 @@ Vector2d<T, Size> operator*(Matrix2x2<T, Size> m, Vector2d<T, Size> v)
 
     return result;
 }
+template <typename T, unsigned int Size>
+Matrix2x2<T,Size> operator*(Matrix2x2<T, Size> m1, Matrix2x2<T, Size> m2)
+{
+    Matrix2x2<T, Size> result;
+    // int a =0;
+    for (int i = 0; i < int(Size); ++i)
+    {
+        for (int j = 0; j < int(Size); ++j)
+        {
+            for(int k=0; k< int(Size); ++k)
+                result(i,j)=result(i,j) + m1(i,k)*m2(k,j);
+        }
+    }
+
+    return result;
+}
+
+
+template <typename T, unsigned int Size>
+bool operator==(Matrix2x2<T, Size> m1, Matrix2x2<T, Size> m2)
+{
+    Matrix2x2<T, Size> result;
+    
+    for (int i = 0; i < int(Size); ++i)
+    {
+        for (int j = 0; j < int(Size); ++j)
+        {
+            if(m1(i,j)!=m2(i,j))
+                return false;
+        }
+    }
+    
+
+    return true;
+}
+
+
+template <typename T, unsigned int Size>
+bool operator==(Matrix2x2<T, Size> m1, T a)
+{
+    Matrix2x2<T, Size> result;
+    for (int i = 0; i < int(Size); ++i)
+    {
+        for (int j = 0; j < int(Size); ++j)
+        {
+            if(m1(i,j)!=a)
+                return false;
+        }
+    }
+    return true;
+}
+// template <typename T, unsigned int Size>

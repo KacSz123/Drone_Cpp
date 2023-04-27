@@ -5,6 +5,8 @@
 
 Cuboid::Cuboid()
 {
+    for (int i = 0; i<3; ++i)
+        this->orientation(i,i) = 1;
     Vector2d<double, 3> vec;
     for (int i=0; i<8; ++i)
     {
@@ -14,10 +16,12 @@ Cuboid::Cuboid()
 
 Cuboid::Cuboid(Vector2d<double, 3> midPt, double lenX, double lenY, double lenZ)
 {
+    for (int i = 0; i<3; ++i)
+        this->orientation(i,i) = 1;
 
     this->midPoint=midPt;
     std::cout<<midPoint<<std::endl<<std::endl<<std::endl;
-
+    std::cout<<this->orientation<<std::endl;
 
     this->coordinates[0].setCoords(midPt[0]-lenX/2, midPt[1]-lenY/2, midPt[2]-lenZ/2);
     this->coordinates[1].setCoords(midPt[0]+lenX/2, midPt[1]-lenY/2, midPt[2]-lenZ/2);
@@ -55,9 +59,11 @@ std::ostream& operator << (std::ostream& ostrm, Cuboid rect)
 
 void Cuboid :: rotateXaxis(double angle)
 {   
+    
     double radians = angle*(M_PI/180.0);
     Matrix2x2<double, 3> m;
     m.getXrotationMatrix(radians);
+    this->orientation=(this->orientation*m);
     for(int i=0; i<8; ++i)
     {
         this->coordinates[i] = m*this->coordinates[i];
@@ -70,6 +76,7 @@ void Cuboid :: rotateYaxis(double angle)
     double radians = angle*(M_PI/180.0);
     Matrix2x2<double, 3> m;
     m.getYrotationMatrix(radians);
+    this->orientation=(this->orientation*m);
     for(int i=0; i<8; ++i)
     {
         this->coordinates[i] = m*this->coordinates[i];
@@ -82,6 +89,7 @@ void Cuboid :: rotateZaxis(double angle)
     double radians = angle*(M_PI/180.0);
     Matrix2x2<double, 3> m;
     m.getZrotationMatrix(radians);
+    this->orientation=(this->orientation*m);
     for(int i=0; i<8; ++i)
     {
         this->coordinates[i] = m*this->coordinates[i];
@@ -90,11 +98,20 @@ void Cuboid :: rotateZaxis(double angle)
 }
 
 
-void Cuboid :: moveCuboid(Vector2d<double, 3> vec)
+void Cuboid :: moveCuboidGlobal(Vector2d<double, 3> vec)
 {
+    this->midPoint+=vec;
     for(int i=0; i<8;++i)
     {
         this->setCorner(i, this->getCorner(i)+vec);
+    }
+}
+void Cuboid :: moveCuboidLocal(Vector2d<double, 3> vec)
+{   
+    this->midPoint+=vec;
+    for(int i=0; i<8;++i)
+    {
+        this->setCorner(i, this->getCorner(i)+(this->orientation*vec));
     }
 }
 

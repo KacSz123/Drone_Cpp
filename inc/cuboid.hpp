@@ -8,6 +8,8 @@ class Cuboid
     private:
         Vector2d<double, 3> coordinates[8]; //leftUp, LeftDown, RightDown, LeftUp
         Vector2d<double, 3> midPoint;
+        Matrix2x2<double, 3> orientation;
+
     public:
         Cuboid();
         Cuboid(Vector2d<double, 3>, double, double, double);
@@ -16,7 +18,9 @@ class Cuboid
         void rotateYaxis(double angle);
         void rotateZaxis(double angle);
         void setCorner(int i, Vector2d<double, 3> vec){this->coordinates[i]=vec;};
-        void moveCuboid(Vector2d<double, 3> vec);
+        void moveCuboidGlobal(Vector2d<double, 3> vec);
+        void moveCuboidLocal(Vector2d<double, 3> vec);
+        
         // void setCorner(int i, Vector2d<double,3> vec){this->coordinates[i]=vec;};
         
 

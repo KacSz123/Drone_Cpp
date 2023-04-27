@@ -221,11 +221,82 @@ void rotate_rect_animZ(Cuboid &rect, double angle,PzG::GnuplotLink link)
                      usleep(10000);
 
                      link.Draw();
-                     cout<<1<<endl;
+                     // cout<<1<<endl;
                      }
                      }
        usleep(10000);
        rect.rotateZaxis(angle);
+                     WriteToStreamExample(rect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(rect, "data/prostokat.dat"))
+                            cout<<"!!!!!!!!!!!!!\n";
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     usleep(10000);
+}
+void moveC(Cuboid &rect, double xv,PzG::GnuplotLink link)
+{
+
+       Cuboid tmpRect;
+       tmpRect=rect;
+       Vector2d<double,3>  v1,vstep;
+       v1.setCoords(xv,0,0);
+       vstep.setCoords(1.0,0,0);
+              for(int i=0; i<=int(xv);++i)
+                     {
+                     {
+                     tmpRect.moveCuboidLocal(vstep);
+                     WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
+                            break;
+                     usleep(10000);
+
+                     link.Draw();
+                     // cout<<1<<endl;
+                     }
+                     }
+
+       usleep(10000);
+       rect.moveCuboidLocal(v1);
+                     WriteToStreamExample(rect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(rect, "data/prostokat.dat"))
+                            cout<<"!!!!!!!!!!!!!\n";
+                     usleep(10000);
+
+                     link.Draw();
+                     cout<<1<<endl;
+                     usleep(10000);
+}
+
+void moveCG(Cuboid &rect, double xv,PzG::GnuplotLink link)
+{
+
+       Cuboid tmpRect;
+       tmpRect=rect;
+       Vector2d<double,3>  v1,vstep;
+       v1.setCoords(xv,0,0);
+       vstep.setCoords(1.0,0,0);
+              for(int i=0; i<=int(xv);++i)
+                     {
+                     {
+                     tmpRect.moveCuboidGlobal(vstep);
+                     WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, "data/prostokat.dat"))
+                            break;
+                     usleep(10000);
+
+                     link.Draw();
+                     // cout<<1<<endl;
+                     }
+                     }
+
+       usleep(10000);
+       rect.moveCuboidGlobal(v1);
                      WriteToStreamExample(rect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(rect, "data/prostokat.dat"))
@@ -270,10 +341,13 @@ int main()
         sleep(2);
        rotate_rect_animZ(rect,50,link);
        sleep(1);
-       rotate_rect_animY(rect,50,link);
+       moveCG(rect, 70,link);
        sleep(1);
-       rotate_rect_animX(rect,50,link);
-       // Matrix2x2<double, 3>  m1;
+       moveC(rect, 50,link);
+       // rotate_rect_animY(rect,50,link);
+       // sleep(1);
+       // rotate_rect_animX(rect,50,link);
+       // Matrix2x2<double, 3>  m1,m2,m3;
        // m1(0,0)=2;
        // m1(0,1)=2;
        // m1(0,2)=2;
@@ -285,10 +359,24 @@ int main()
        // m1(2,0)=4;
        // m1(2,1)=2;
        // m1(2,2)=5;
-       // Vector2d<double,3>  vec;
-       // vec.setCoords(3,2,1);
-       // vec = m1*vec;
-       // cout<<vec;
+
+
+       // m2(0,0)=3;
+       // m2(0,1)=3;
+       // m2(0,2)=3;
+
+       // m2(1,0)=2;
+       // m2(1,1)=2;
+       // m2(1,2)=3;
+
+       // m2(2,0)=1;
+       // m2(2,1)=1;
+       // m2(2,2)=3;
+       // m3 = m1*m2;
+       // // Vector2d<double,3>  vec;
+       // // vec.setCoords(3,2,1);
+       // // vec = m1*vec;
+       //  cout<<m3;
        // rotate_rect_anim(rect,-2*a,link);
 
        getchar();
