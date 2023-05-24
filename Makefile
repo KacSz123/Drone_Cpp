@@ -22,11 +22,11 @@ __end__:
 	@echo "Uruchom plik $(bold)${OUT}$(sgr0) w celu przetestowania programu"  
 	@echo  ""
 	
-all: OBJ/vector2d.o OBJ/matrix2x2.o OBJ/cuboid.o OBJ/gnuplot_link.o OBJ/main.o 
+all: OBJ/vector2d.o OBJ/matrix2x2.o OBJ/geometric_obj.o OBJ/cuboid.o  OBJ/gnuplot_link.o OBJ/main.o
 	@echo "\e[42mKompilacja i konsolidacja programu\e[49m"
-	g++ -Wall -pedantic -std=c++0x -o ${OUT} OBJ/main.o OBJ/cuboid.o OBJ/vector2d.o OBJ/matrix2x2.o  OBJ/gnuplot_link.o
+	g++ -Wall -pedantic -std=c++0x -o ${OUT} OBJ/main.o OBJ/cuboid.o OBJ/vector2d.o OBJ/matrix2x2.o  OBJ/gnuplot_link.o  OBJ/geometric_obj.o
 
-OBJ/cuboid.o: src/cuboid.cpp inc/cuboid.hpp inc/matrix2x2.hpp inc/vector2d.hpp
+OBJ/cuboid.o: src/cuboid.cpp inc/cuboid.hpp inc/matrix2x2.hpp inc/vector2d.hpp inc/geometric_obj.hpp 
 	@echo "\e[44mKompilacja pliku $(bold)cuboid.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/cuboid.cpp -o OBJ/cuboid.o
 	@echo
@@ -52,7 +52,11 @@ OBJ/gnuplot_link.o: src/gnuplot_link.cpp inc/gnuplot_link.hpp
 	g++ -c ${CFLAGS} src/gnuplot_link.cpp -o OBJ/gnuplot_link.o
 	@echo
 	@echo
-
+OBJ/geometric_obj.o:  src/geometric_obj.cpp inc/geometric_obj.hpp inc/matrix2x2.hpp inc/vector2d.hpp 
+	@echo "\e[44mKompilacja pliku $(bold)geometric_obj.cpp$(sgr0)\e[49m"
+	g++ -c ${CFLAGS} src/geometric_obj.cpp -o OBJ/geometric_obj.o
+	@echo
+	@echo
 OBJ/main.o: src/main.cpp inc/cuboid.hpp inc/vector2d.hpp inc/matrix2x2.hpp inc/gnuplot_link.hpp
 	@echo "\e[44mKompilacja pliku $(bold)main.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/main.cpp -o OBJ/main.o

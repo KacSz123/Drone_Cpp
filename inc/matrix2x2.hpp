@@ -242,3 +242,4 @@ bool operator==(Matrix2x2<T, Size> m1, T a)
     return true;
 }
 // template <typename T, unsigned int Size>
+typedef Matrix2x2<double,3> Matrix3x3;

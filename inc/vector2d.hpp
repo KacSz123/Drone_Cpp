@@ -84,3 +84,6 @@ Vector2d<T,Size>& operator * (Vector2d<T,Size>& vec1, double a)
         vec1.setCoord(i, vec1.getCoord(i)*a);
     return vec1;
 }
+
+////
+typedef Vector2d<double,3> vector3D;

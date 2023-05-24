@@ -73,8 +73,11 @@ void test();
 
 void rotate_rect_animY(Cuboid &rect, double angle, PzG::GnuplotLink link, string filename)
 {
+       std::cout<<"dup1\n";
        Cuboid tmpRect;
        tmpRect = rect;
+
+       std::cout<<"dup1\n";
        if (angle >= 0.0)
               for (int i = 0; i <= int(angle); ++i)
               {
@@ -250,11 +253,20 @@ void addToDrawingList(PzG::GnuplotLink &l, const char* name)
 }
 int main()
 {
+
+    std::cout<<"siema2main\n";
+       std::cout<<"dup1\n";
        Vector2d<double, 3> vMid, vMid2, vMid3;
+
+       std::cout<<"dup1\n";
        vMid.setCoords(0.0, 0.0, 0.0);
+
        vMid2.setCoords(0.0, -10.0, -100.0);
        vMid3.setCoords(60.0, 40.0, 20.0);
        Cuboid rect(vMid, 60.0, 40.0, 20.0); 
+       std::cout<<"dup1\n";
+
+       std::cout<<"dup1\n";
        Cuboid rect2(vMid2, 100.0, 30.0, 30.0); 
        Cuboid rect3(vMid3, 80.0, 30.0, 30.0); // To tylko przykladowe definicje zmiennej
        PzG::GnuplotLink link1;                // Ta zmienna jest potrzebna do wizualizacji
