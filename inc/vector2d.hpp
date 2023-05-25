@@ -7,23 +7,13 @@ private:
 T coordinates[Size];
 public:
 Vector2d();
-Vector2d(double, double);
-void setCoord(double x, double y);
+Vector2d(double, double,double);
 void setCoords(double x, double y, double z) {this->coordinates[0]=x;this->coordinates[1]=y;this->coordinates[2]=z;};
 void setCoord(int i, T val){ this->coordinates[i]=val;};
-inline double const getX(){return this->coordinates[0];};
-inline double const getY(){return this->coordinates[1];};
-inline double const getXorY(int i){return this->coordinates[i];};
 inline T getCoord(int i){return this->coordinates[i];};
 inline double& operator[](int i){return this->coordinates[i];  };
 
 }; 
-template<typename T, unsigned int Size>
-void Vector2d<T,Size>::setCoord(double x,double y)
-{
-    this->coordinates[0]=x;
-    this->coordinates[1]=y;
-}
 
 template<typename T, unsigned int Size>
 Vector2d<T,Size>::Vector2d()
@@ -32,10 +22,11 @@ Vector2d<T,Size>::Vector2d()
     this->coordinates[1]=0;
 }
 template<typename T, unsigned int Size>
-Vector2d<T,Size>::Vector2d(double x, double y)
+Vector2d<T,Size>::Vector2d(double x, double y,double z)
 {
     this->coordinates[0]=x;
     this->coordinates[1]=y;
+    this->coordinates[2]=z;
 }
 template<typename T, unsigned int Size>
 Vector2d<T, Size> operator + (Vector2d<T,Size> vec1, Vector2d<T,Size> vec2)

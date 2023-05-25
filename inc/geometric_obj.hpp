@@ -22,13 +22,14 @@ class GeometricObj
         void setOrientation(Matrix3x3 m){this->_orientMatrix = m;}
         Matrix3x3 getOrientation(){return this->_orientMatrix;}
         vector3D getVertex(int i){return this->_vertexes[i];}
-        void moveObject(vector3D vec);
-        void moveObjectForward(double x);
-        void rotateObject(double angle, char axis);
+        void move(vector3D vec);
+        void moveForward(double x);
+        void rotate(double angle, char axis);
 
-        vector3D const getCorner(int i) {return this->_vertexes[i];};
+        vector3D getCorner(int i) {return this->_vertexes[i];};
         vector3D getMidPoint(){return this->_midPoint;}
         GeometricObj();
+        GeometricObj(int a);
         ~GeometricObj(){this->_vertexes.clear();    this->_vertexes.shrink_to_fit();}
 
 

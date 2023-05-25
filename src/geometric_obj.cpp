@@ -9,12 +9,23 @@ GeometricObj::GeometricObj()
         this->_orientMatrix(i, i) = 1;
     }
 }
-void GeometricObj::moveObject(Vector2d<double,3> vec)
+GeometricObj::GeometricObj(int a)
+{   vector3D *vec = new vector3D;
+    for (int i = 0; i < 3; ++i)
+    {
+        this->_orientMatrix(i, i) = 1;
+    }
+    for(int i = 0; i<a; ++i)
+        this->_vertexes.push_back(*vec);
+
+    delete vec;
+}
+void GeometricObj::move(Vector2d<double,3> vec)
 {
  for(VertexVec::iterator i = this->_vertexes.begin(); i!=this->_vertexes.end(); i++)
     *i = *i+vec;
 }
-void GeometricObj::moveObjectForward(double x)
+void GeometricObj::moveForward(double x)
 {
     vector3D v;
     v.setCoords(x, 0,0);
@@ -22,14 +33,15 @@ void GeometricObj::moveObjectForward(double x)
 
     this->setMidPoint( this->getMidPoint() + this->getOrientation() * v);
 
-    for (int i = 0; i < 8; ++i)
+    for (int i=0; i<int(this->_vertexes.size()); i++)
     {
-        this->setVertex(i, this->getCorner(i)+(this->getOrientation() * v));
+         this->setVertex(i, this->getCorner(i)+(this->getOrientation() * v));
+        
     }
 }
 
 
-void GeometricObj::rotateObject(double angle, char axis)
+void GeometricObj::rotate(double angle, char axis)
 {
     double radians = angle * (M_PI / 180.0);
     Matrix3x3 m;

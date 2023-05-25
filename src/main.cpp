@@ -3,12 +3,13 @@
 #include <fstream>
 #include <string>
 #include <unistd.h>
-
-#include "vector2d.hpp"
 #include "gnuplot_link.hpp"
+
+#include "drone.hpp"
+#include "vector2d.hpp"
 #include "matrix2x2.hpp"
 #include "cuboid.hpp"
-
+#include "hexagonal_prism.hpp"
 using namespace std;
 
 /*
@@ -37,10 +38,11 @@ const int kLongerEdgesLength = 150;
  */
 void WriteToStreamExample(Cuboid rect, ostream &output_stream)
 {
-
-       output_stream << rect <<"\n";
-       //  rect.getCorner(0) << "\n"
-       //               << rect.getCorner(1);
+       output_stream << rect << "\n";
+}
+void WriteToStreamExample(HexagonalPrism hex, ostream &output_stream)
+{
+       output_stream << hex << "\n";
 }
 /*!
  * Przyklad zapisu wspolrzednych zbioru punktow do pliku, z ktorego
@@ -69,64 +71,30 @@ bool WriteToFileExample(Cuboid rect, string filename)
        return !file_stream.fail();
 }
 
-void test();
-
-void rotate_rect_animY(Cuboid &rect, double angle, PzG::GnuplotLink link, string filename)
+bool WriteToFileExample(HexagonalPrism hex, string filename)
 {
-       std::cout<<"dup1\n";
-       Cuboid tmpRect;
-       tmpRect = rect;
-
-       std::cout<<"dup1\n";
-       if (angle >= 0.0)
-              for (int i = 0; i <= int(angle); ++i)
-              {
-                     {
-                            tmpRect.rotateYaxis(1.0);
-                            // WriteToStreamExample(tmpRect, cout);
-                            usleep(10000);
-                            if (!WriteToFileExample(tmpRect,filename))
-                                   break;
-                            usleep(10000);
-
-                            link.Draw();
-
-                     }
-              }
-       else
+       ofstream file_stream;
+       file_stream.open(filename);
+       if (!file_stream.is_open())
        {
-              for (int i = angle; i <= 0; ++i)
-              {
-                     tmpRect.rotateYaxis(-1.0);
-                     // WriteToStreamExample(tmpRect, cout);
-                     usleep(10000);
-                     if (!WriteToFileExample(tmpRect, filename))
-                            break;
-                     usleep(10000);
-                     link.Draw();
-
-              }
+              cerr << ":(  Operacja otwarcia do zapisu \"" << filename << "\"" << endl
+                   << ":(  nie powiodla sie." << endl;
+              return false;
        }
-       usleep(10000);
-       rect.rotateYaxis(angle);
-       WriteToStreamExample(rect, cout);
-       usleep(10000);
-       if (!WriteToFileExample(rect, filename))
-              cout << "!!!!!!!!!!!!!\n";
-       usleep(10000);
-       link.Draw();
-       usleep(10000);
+       WriteToStreamExample(hex, file_stream);
+       file_stream.close();
+       return !file_stream.fail();
 }
-
-void rotate_rect_animX(Cuboid &rect, double angle, PzG::GnuplotLink link, string filename)
+void rotate_rect_anim(Cuboid &rect, double angle, PzG::GnuplotLink link, string filename, char axis)
 {
        Cuboid tmpRect;
        tmpRect = rect;
+
        if (angle >= 0.0)
               for (int i = 0; i <= int(angle); ++i)
               {
                      {
-                            tmpRect.rotateXaxis(1.0);
+                            tmpRect.rotate(1.0, axis);
                             // WriteToStreamExample(tmpRect, cout);
                             usleep(10000);
                             if (!WriteToFileExample(tmpRect, filename))
@@ -139,37 +107,36 @@ void rotate_rect_animX(Cuboid &rect, double angle, PzG::GnuplotLink link, string
        {
               for (int i = angle; i <= 0; ++i)
               {
-                     tmpRect.rotateXaxis(-1.0);
+                     tmpRect.rotate(1.0, axis);
                      // WriteToStreamExample(tmpRect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(tmpRect, filename))
                             break;
                      usleep(10000);
                      link.Draw();
-
               }
        }
        usleep(10000);
-       rect.rotateXaxis(angle);
-       WriteToStreamExample(rect, cout);
+       rect.rotate(angle, axis);
+       // WriteToStreamExample(rect, cout);
        usleep(10000);
        if (!WriteToFileExample(rect, filename))
               cout << "!!!!!!!!!!!!!\n";
        usleep(10000);
        link.Draw();
-
        usleep(10000);
 }
-void rotate_rect_animZ(Cuboid &rect, double angle, PzG::GnuplotLink link, string filename)
-{
 
-       Cuboid tmpRect;
+void rotate_rect_anim(HexagonalPrism &rect, double angle, PzG::GnuplotLink link, string filename, char axis)
+{
+       HexagonalPrism tmpRect;
        tmpRect = rect;
+
        if (angle >= 0.0)
               for (int i = 0; i <= int(angle); ++i)
               {
                      {
-                            tmpRect.rotateZaxis(1.0);
+                            tmpRect.rotate(1.0, axis);
                             // WriteToStreamExample(tmpRect, cout);
                             usleep(10000);
                             if (!WriteToFileExample(tmpRect, filename))
@@ -182,7 +149,7 @@ void rotate_rect_animZ(Cuboid &rect, double angle, PzG::GnuplotLink link, string
        {
               for (int i = angle; i <= 0; ++i)
               {
-                     tmpRect.rotateZaxis(-1.0);
+                     tmpRect.rotate(1.0, axis);
                      // WriteToStreamExample(tmpRect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(tmpRect, filename))
@@ -192,8 +159,8 @@ void rotate_rect_animZ(Cuboid &rect, double angle, PzG::GnuplotLink link, string
               }
        }
        usleep(10000);
-       rect.rotateZaxis(angle);
-       WriteToStreamExample(rect, cout);
+       rect.rotate(angle, axis);
+       // WriteToStreamExample(rect, cout);
        usleep(10000);
        if (!WriteToFileExample(rect, filename))
               cout << "!!!!!!!!!!!!!\n";
@@ -201,15 +168,18 @@ void rotate_rect_animZ(Cuboid &rect, double angle, PzG::GnuplotLink link, string
        link.Draw();
        usleep(10000);
 }
+
 void moveC(Cuboid &rect, double xv, PzG::GnuplotLink link, string filename)
-{
+{      
+
+
        Cuboid tmpRect;
        tmpRect = rect;
        if (xv > 0)
        {
               for (int i = 0; i <= int(xv); ++i)
               {
-                     tmpRect.moveCuboidForward(1);
+                     tmpRect.moveForward(1);
                      // WriteToStreamExample(tmpRect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(tmpRect, filename.c_str()))
@@ -222,7 +192,7 @@ void moveC(Cuboid &rect, double xv, PzG::GnuplotLink link, string filename)
        {
               for (int i = int(xv); i <= 0; ++i)
               {
-                     tmpRect.moveCuboidForward(-1);
+                     tmpRect.moveForward(-1);
                      // WriteToStreamExample(tmpRect, cout);
                      usleep(10000);
                      if (!WriteToFileExample(tmpRect, filename.c_str()))
@@ -233,8 +203,50 @@ void moveC(Cuboid &rect, double xv, PzG::GnuplotLink link, string filename)
        }
 
        usleep(10000);
-       rect.moveCuboidForward(xv);
-       WriteToStreamExample(rect, cout);
+       rect.moveForward(xv);
+       // WriteToStreamExample(rect, cout);
+       usleep(10000);
+       if (!WriteToFileExample(rect, filename.c_str()))
+              cout << "!!!!!!!!!!!!!\n";
+       usleep(10000);
+
+       link.Draw();
+       usleep(10000);
+}
+void moveC(HexagonalPrism &rect, double xv, PzG::GnuplotLink link, string filename)
+{
+       HexagonalPrism tmpRect;
+       tmpRect = rect;
+       if (xv > 0)
+       {
+              for (int i = 0; i <= int(xv); ++i)
+              {
+                     tmpRect.moveForward(1);
+                     // WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, filename.c_str()))
+                            break;
+                     usleep(10000);
+                     link.Draw();
+              }
+       }
+       else
+       {
+              for (int i = int(xv); i <= 0; ++i)
+              {
+                     tmpRect.moveForward(-1);
+                     // WriteToStreamExample(tmpRect, cout);
+                     usleep(10000);
+                     if (!WriteToFileExample(tmpRect, filename.c_str()))
+                            break;
+                     usleep(10000);
+                     link.Draw();
+              }
+       }
+
+       usleep(10000);
+       rect.moveForward(xv);
+       // WriteToStreamExample(rect, cout);
        usleep(10000);
        if (!WriteToFileExample(rect, filename.c_str()))
               cout << "!!!!!!!!!!!!!\n";
@@ -245,37 +257,30 @@ void moveC(Cuboid &rect, double xv, PzG::GnuplotLink link, string filename)
        usleep(10000);
 }
 
-
-void addToDrawingList(PzG::GnuplotLink &l, const char* name)
+void addToDrawingList(PzG::GnuplotLink &l, const char *name)
 {
-  
-             
 }
 int main()
 {
-
-    std::cout<<"siema2main\n";
-       std::cout<<"dup1\n";
        Vector2d<double, 3> vMid, vMid2, vMid3;
 
-       std::cout<<"dup1\n";
        vMid.setCoords(0.0, 0.0, 0.0);
 
-       vMid2.setCoords(0.0, -10.0, -100.0);
+       vMid2.setCoords(0.0, 0.0, 100.0);
        vMid3.setCoords(60.0, 40.0, 20.0);
-       Cuboid rect(vMid, 60.0, 40.0, 20.0); 
-       std::cout<<"dup1\n";
+       Cuboid rect(vMid, 60.0, 40.0, 20.0);
 
-       std::cout<<"dup1\n";
-       Cuboid rect2(vMid2, 100.0, 30.0, 30.0); 
-       Cuboid rect3(vMid3, 80.0, 30.0, 30.0); // To tylko przykladowe definicje zmiennej
-       PzG::GnuplotLink link1;                // Ta zmienna jest potrzebna do wizualizacji
-                                  // rysunku prostokata
-       const char *sep=", ";
-       string f1="data/prostokat1.dat", f2="data/prostokat2.dat", f3="data/prostokat3.dat";
-       link1.AddDrawingFromFiles(f1,&sep);
-       link1.AddDrawingFromFiles(f2,&sep);
-       link1.AddDrawingFromFiles(f3,&sep);
+       Drone d(vMid);
+
+       // Cuboid rect2(vMid2, 100.0, 30.0, 30.0);
+       Cuboid rect3(vMid3, 180.0, 30.0, 30.0); // To tylko przykladowe definicje zmiennej
+       PzG::GnuplotLink link1;                 // Ta zmienna jest potrzebna do wizualizacji
+       HexagonalPrism hex(vMid2, 60.0, 60.0);  // rysunku prostokata
+       const char *sep = ", ";
+       string f1 = "data/prostokat1.dat", f2 = "data/prostokat2.dat", f3 = "data/prostokat3.dat";
+       link1.AddDrawingFromFiles(f1, &sep);
+       link1.AddDrawingFromFiles(f2, &sep);
+       link1.AddDrawingFromFiles(f3, &sep);
        //-------------------------------------------------------
        //  Wspolrzedne wierzcholkow beda zapisywane w pliku "prostokat.dat"
        //  Ponizsze metody powoduja, ze dane z pliku beda wizualizowane
@@ -291,39 +296,41 @@ int main()
        // link.AddFilename("data/prostokat.dat", PzG::LS_SCATTERED, 2);
        //
        //  Ustawienie trybu rysowania 2D, tzn. rysowany zbiór punktów
-      
+
        //  znajduje się na wspólnej płaszczyźnie. Z tego powodu powoduj
        //  jako wspolrzedne punktow podajemy tylko x,y.
        //
        link1.AddFilename(f1.c_str(), PzG::LS_CONTINUOUS, 2);
-       WriteToStreamExample(rect, cout);
+       // WriteToStreamExample(rect, cout);
        if (!WriteToFileExample(rect, f1.c_str()))
               return 1;
        link1.Draw();
        link1.AddFilename(f2.c_str(), PzG::LS_CONTINUOUS, 2);
-       WriteToStreamExample(rect2, cout);
-       if (!WriteToFileExample(rect2, f2.c_str()))
+       // WriteToStreamExample(hex, cout);
+       if (!WriteToFileExample(hex, f2.c_str()))
               return 1;
        link1.Draw();
        link1.AddFilename(f3.c_str(), PzG::LS_CONTINUOUS, 2);
-       WriteToStreamExample(rect3, cout);
+       // WriteToStreamExample(rect3, cout);
        if (!WriteToFileExample(rect3, f3.c_str()))
               return 1;
-              
-       // sleep(1); 
 
-       link1.Draw();
        sleep(1);
-    rotate_rect_animY(rect, 90, link1,f1);
-       sleep(1);
-    rotate_rect_animZ(rect3, -90, link1,f3);
-       sleep(1);
-       moveC(rect2, 100, link1,f2);
-       sleep(1);
-       moveC(rect, 100, link1,f1);
-    rotate_rect_animY(rect2, 90, link1,f2);
-       sleep(1);
-       moveC(rect3, 100, link1,f3);
+
+       //        link1.Draw();
+       //        sleep(1);
+       //     rotate_rect_anim(rect, 90, link1,f1,'Y');
+       //        sleep(1);
+       //     rotate_rect_anim(rect3, -90, link1,f3, 'Z');
+       //        sleep(1);
+       //        moveC(rect2, 100, link1,f2);
+       //        sleep(1);
+       //        moveC(rect, 100, link1,f1);
+       //     rotate_rect_anim(rect2, 90, link1,f2,'Y');
+       //        sleep(1);
+       moveC(hex, 100, link1,f2);
+       rotate_rect_anim(hex,45.0,link1,f2,'Z');
+       moveC(hex, 100, link1,f2);
+       cout<<hex.getMidPoint()<<endl;
        getchar();
-
- }
+}

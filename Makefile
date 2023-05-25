@@ -22,9 +22,9 @@ __end__:
 	@echo "Uruchom plik $(bold)${OUT}$(sgr0) w celu przetestowania programu"  
 	@echo  ""
 	
-all: OBJ/vector2d.o OBJ/matrix2x2.o OBJ/geometric_obj.o OBJ/cuboid.o  OBJ/gnuplot_link.o OBJ/main.o
+all: OBJ/vector2d.o OBJ/matrix2x2.o OBJ/geometric_obj.o OBJ/cuboid.o OBJ/hexagonal_prism.o OBJ/drone.o OBJ/gnuplot_link.o OBJ/main.o
 	@echo "\e[42mKompilacja i konsolidacja programu\e[49m"
-	g++ -Wall -pedantic -std=c++0x -o ${OUT} OBJ/main.o OBJ/cuboid.o OBJ/vector2d.o OBJ/matrix2x2.o  OBJ/gnuplot_link.o  OBJ/geometric_obj.o
+	g++ -Wall -pedantic -std=c++0x -o ${OUT} OBJ/main.o OBJ/cuboid.o OBJ/vector2d.o OBJ/matrix2x2.o OBJ/gnuplot_link.o  OBJ/geometric_obj.o OBJ/hexagonal_prism.o OBJ/drone.o 
 
 OBJ/cuboid.o: src/cuboid.cpp inc/cuboid.hpp inc/matrix2x2.hpp inc/vector2d.hpp inc/geometric_obj.hpp 
 	@echo "\e[44mKompilacja pliku $(bold)cuboid.cpp$(sgr0)\e[49m"
@@ -32,6 +32,11 @@ OBJ/cuboid.o: src/cuboid.cpp inc/cuboid.hpp inc/matrix2x2.hpp inc/vector2d.hpp i
 	@echo
 	@echo
 
+OBJ/hexagonal_prism.o: src/hexagonal_prism.cpp inc/hexagonal_prism.hpp inc/matrix2x2.hpp inc/vector2d.hpp inc/geometric_obj.hpp 
+	@echo "\e[44mKompilacja pliku $(bold)hexagonal_prism.cpp$(sgr0)\e[49m"
+	g++ -c ${CFLAGS} src/hexagonal_prism.cpp -o OBJ/hexagonal_prism.o
+	@echo
+	@echo
 
 OBJ/vector2d.o: src/vector2d.cpp inc/vector2d.hpp
 	@echo "\e[44mKompilacja pliku $(bold)vector2d.cpp$(sgr0)\e[49m"
@@ -39,6 +44,11 @@ OBJ/vector2d.o: src/vector2d.cpp inc/vector2d.hpp
 	@echo
 	@echo
 
+OBJ/drone.o:  src/drone.cpp inc/drone.hpp inc/hexagonal_prism.hpp inc/cuboid.hpp inc/matrix2x2.hpp inc/vector2d.hpp inc/geometric_obj.hpp 
+	@echo "\e[44mKompilacja pliku $(bold)drone.cpp$(sgr0)\e[49m"
+	g++ -c ${CFLAGS} src/drone.cpp -o OBJ/drone.o
+	@echo
+	@echo
 
 OBJ/matrix2x2.o: src/matrix2x2.cpp inc/matrix2x2.hpp inc/vector2d.hpp
 	@echo "\e[44mKompilacja pliku $(bold)matrix2x2.cpp$(sgr0)\e[49m"
@@ -57,7 +67,7 @@ OBJ/geometric_obj.o:  src/geometric_obj.cpp inc/geometric_obj.hpp inc/matrix2x2.
 	g++ -c ${CFLAGS} src/geometric_obj.cpp -o OBJ/geometric_obj.o
 	@echo
 	@echo
-OBJ/main.o: src/main.cpp inc/cuboid.hpp inc/vector2d.hpp inc/matrix2x2.hpp inc/gnuplot_link.hpp
+OBJ/main.o: src/main.cpp inc/cuboid.hpp inc/vector2d.hpp inc/matrix2x2.hpp inc/gnuplot_link.hpp inc/hexagonal_prism.hpp inc/drone.hpp
 	@echo "\e[44mKompilacja pliku $(bold)main.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/main.cpp -o OBJ/main.o
 	@echo

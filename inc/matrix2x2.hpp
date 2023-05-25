@@ -8,9 +8,8 @@ using std::ostream;
 template <typename T, unsigned int Size>
 class Matrix2x2
 {
-    T matrix[Size][Size];
-
 private:
+    T matrix[Size][Size];
 public:
     Matrix2x2();
     Matrix2x2(double, double, double, double);
@@ -59,7 +58,6 @@ void Matrix2x2<T, Size>::getXrotationMatrix(const double angle)
     }
     else if (Size == 2)
     {
-
         this->matrix[0][0] = cos(angle);
         this->matrix[0][1] = sin(angle);
 
@@ -126,7 +124,6 @@ void Matrix2x2<T, Size>::getZrotationMatrix(const double angle)
 template <typename T, unsigned int Size>
 Matrix2x2<T, Size>::Matrix2x2()
 {
-
     for (int i = 0; i < int(Size); ++i)
     {
         for (int j = 0; j < int(Size); ++j)
@@ -139,7 +136,6 @@ Matrix2x2<T, Size>::Matrix2x2()
 template <typename T, unsigned int Size>
 Matrix2x2<T, Size>::Matrix2x2(double a11, double a12, double a21, double a22)
 {
-
     this->matrix[0][0] = a11;
     this->matrix[0][1] = a12;
     this->matrix[1][0] = a21;
@@ -173,7 +169,6 @@ Vector2d<T, Size> operator*(Matrix2x2<T, Size> m, Vector2d<T, Size> v)
             result.setCoord(i, result[i] + (m(i, j) * v[j]));
         }
     }
-
     return result;
 }
 template <typename T, unsigned int Size>
@@ -189,7 +184,6 @@ Matrix2x2<T,Size> operator*(Matrix2x2<T, Size> m1, Matrix2x2<T, Size> m2)
                 result(i,j)=result(i,j) + m1(i,k)*m2(k,j);
         }
     }
-
     return result;
 }
 
@@ -197,7 +191,6 @@ template <typename T, unsigned int Size>
 Matrix2x2<T,Size> operator+(Matrix2x2<T, Size> m1, Matrix2x2<T, Size> m2)
 {
     Matrix2x2<T, Size> result;
-    // int a =0;
     for (int i = 0; i < int(Size); ++i)
     {
         for (int j = 0; j < int(Size); ++j)
@@ -205,7 +198,6 @@ Matrix2x2<T,Size> operator+(Matrix2x2<T, Size> m1, Matrix2x2<T, Size> m2)
                 result(i,j)=m1(i,j)+m2(i,j);
         }
     }
-
     return result;
 }
 template <typename T, unsigned int Size>
@@ -221,8 +213,6 @@ bool operator==(Matrix2x2<T, Size> m1, Matrix2x2<T, Size> m2)
                 return false;
         }
     }
-    
-
     return true;
 }
 
