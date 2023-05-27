@@ -4,21 +4,20 @@
 HexagonalPrism::HexagonalPrism(vector3D midPt, double height, double radius):GeometricObj(12)
 {
     Matrix3x3 *m = new Matrix3x3;
-    vector3D *vup = new vector3D;
-    vector3D *vdown = new vector3D;
+    vector3D *vup = new vector3D(radius,0, height/2.0);
+    vector3D *vdown = new vector3D(radius,0, -height/2.0);
     double angle = 2.0*(M_PI/6.0);
+    this->setMidPoint(midPt);
     m->getZrotationMatrix(angle);
 
-    (*vup).setCoords(radius,0, height/2.0);
-    (*vup) = (*vup) + midPt;
-    (*vdown).setCoords(radius,0, -height/2.0);
-    (*vdown)=(*vdown)+midPt;
+    // (*vup).setCoords(radius,0, height/2.0);
+    (*vup) = (*vup)  ;
+    (*vdown)=(*vdown);
 
-    this->setMidPoint(midPt);
     for(int i =0; i<6; ++i)
     {
-        this->setVertex(i,(*vup));
-        this->setVertex(i+6,(*vdown));
+        this->setVertex(i,(*vup)+midPt);
+        this->setVertex(i+6,(*vdown)+midPt);
 
         (*vup)=(*m)*(*vup);
         (*vdown)=(*m)*(*vdown);

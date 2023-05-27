@@ -253,7 +253,7 @@ void moveC(HexagonalPrism &rect, double xv, PzG::GnuplotLink link, string filena
        usleep(10000);
 
        link.Draw();
-       cout << 1 << endl;
+       // cout << 1 << endl;//
        usleep(10000);
 }
 
@@ -262,32 +262,30 @@ void addToDrawingList(PzG::GnuplotLink &l, const char *name)
 }
 int main()
 {
-       Vector2d<double, 3> vMid, vMid2, vMid3;
+       Vector2d<double, 3> vMid;
 
        vMid.setCoords(0.0, 0.0, 0.0);
 
-       vMid2.setCoords(0.0, 0.0, 100.0);
-       vMid3.setCoords(60.0, 40.0, 20.0);
-       Cuboid rect(vMid, 60.0, 40.0, 20.0);
-
        Drone d(vMid);
-
-       // Cuboid rect2(vMid2, 100.0, 30.0, 30.0);
-       Cuboid rect3(vMid3, 180.0, 30.0, 30.0); // To tylko przykladowe definicje zmiennej
+  // rysunku prostokata
        PzG::GnuplotLink link1;                 // Ta zmienna jest potrzebna do wizualizacji
-       HexagonalPrism hex(vMid2, 60.0, 60.0);  // rysunku prostokata
-       const char *sep = ", ";
-       string f1 = "data/prostokat1.dat", f2 = "data/prostokat2.dat", f3 = "data/prostokat3.dat";
-       link1.AddDrawingFromFiles(f1, &sep);
-       link1.AddDrawingFromFiles(f2, &sep);
-       link1.AddDrawingFromFiles(f3, &sep);
+       link1.SetDrawingMode(PzG::DM_3D);
+       link1.Init();
+
+       link1.AddFilename(d[0].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d[1].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d[2].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d[3].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d[4].c_str(), PzG::LS_CONTINUOUS, 2);
+       
+
+       // link1.
        //-------------------------------------------------------
        //  Wspolrzedne wierzcholkow beda zapisywane w pliku "prostokat.dat"
        //  Ponizsze metody powoduja, ze dane z pliku beda wizualizowane
        //  na dwa sposoby:
        //   1. Rysowane jako linia ciagl o grubosci 2 piksele
        //
-       link1.SetDrawingMode(PzG::DM_3D);
 
        //
        //   2. Rysowane jako zbior punktow reprezentowanych przez kwadraty,
@@ -300,22 +298,44 @@ int main()
        //  znajduje się na wspólnej płaszczyźnie. Z tego powodu powoduj
        //  jako wspolrzedne punktow podajemy tylko x,y.
        //
-       link1.AddFilename(f1.c_str(), PzG::LS_CONTINUOUS, 2);
-       // WriteToStreamExample(rect, cout);
-       if (!WriteToFileExample(rect, f1.c_str()))
+
+       if (!WriteToFileExample(d.getBody(), d[0].c_str()))
               return 1;
+       if (!WriteToFileExample(d.getRotor(0), d[1].c_str()))
+              return 1;
+       if (!WriteToFileExample(d.getRotor(1), d[2].c_str()))
+              return 1;
+       if (!WriteToFileExample(d.getRotor(2), d[3].c_str()))
+              return 1;
+       if (!WriteToFileExample(d.getRotor(3), d[4].c_str()))
+              return 1;
+       
+       sleep(1);
        link1.Draw();
-       link1.AddFilename(f2.c_str(), PzG::LS_CONTINUOUS, 2);
-       // WriteToStreamExample(hex, cout);
-       if (!WriteToFileExample(hex, f2.c_str()))
-              return 1;
-       link1.Draw();
-       link1.AddFilename(f3.c_str(), PzG::LS_CONTINUOUS, 2);
-       // WriteToStreamExample(rect3, cout);
-       if (!WriteToFileExample(rect3, f3.c_str()))
-              return 1;
 
        sleep(1);
+for(int i=0;i<100;++i)
+{ 
+       d.moveDrone(1);
+       usleep(500);
+              if (!WriteToFileExample(d.getBody(), d[0].c_str()))
+              return 1;
+
+       if (!WriteToFileExample(d.getRotor(0), d[1].c_str()))
+              return 1;
+
+       if (!WriteToFileExample(d.getRotor(1), d[2].c_str()))
+              return 1;
+
+       if (!WriteToFileExample(d.getRotor(2), d[3].c_str()))
+              return 1;
+       if (!WriteToFileExample(d.getRotor(3), d[4].c_str()))
+              return 1;
+       usleep(500);
+
+       link1.Draw();
+       usleep(500);
+       }
 
        //        link1.Draw();
        //        sleep(1);
@@ -328,9 +348,10 @@ int main()
        //        moveC(rect, 100, link1,f1);
        //     rotate_rect_anim(rect2, 90, link1,f2,'Y');
        //        sleep(1);
-       moveC(hex, 100, link1,f2);
-       rotate_rect_anim(hex,45.0,link1,f2,'Z');
-       moveC(hex, 100, link1,f2);
-       cout<<hex.getMidPoint()<<endl;
-       getchar();
+       // moveC(hex, 100, link1,f2);
+       // rotate_rect_anim(hex,45.0,link1,f2,'Z');
+       // moveC(hex, 100, link1,f2);
+       // cout<<hex.getMidPoint()<<endl;
+        getchar();
+        return 0;
 }
