@@ -7,12 +7,13 @@ private:
 T coordinates[Size];
 public:
 Vector2d();
+// Vector2d(vector2d<T, Size>&){for(int i=0; i<int(Size); ++i) *this[i]=v[i]};
 Vector2d(double, double,double);
 void setCoords(double x, double y, double z) {this->coordinates[0]=x;this->coordinates[1]=y;this->coordinates[2]=z;};
 void setCoord(int i, T val){ this->coordinates[i]=val;};
 inline T getCoord(int i){return this->coordinates[i];};
 inline double& operator[](int i){return this->coordinates[i];  };
-
+// Vector2d<T,Size>& operator = (Vector2d<T,Size>& v) {return *this;}
 }; 
 
 template<typename T, unsigned int Size>
