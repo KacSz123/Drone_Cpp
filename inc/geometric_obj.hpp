@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GEOMMETRIC_OBJ_HPP
+#define GEOMMETRIC_OBJ_HPP
 
 #include "matrix2x2.hpp"
 #include <vector>
@@ -24,7 +25,9 @@ public:
     vector3D getVertex(int i) { return this->_vertexes[i]; }
     void move(vector3D vec);
     void moveForward(double x);
-    void rotate(double angle, char axis);
+    void soarForward(double x,double y);
+    void rotate(double angle, char axis, bool aroundOwnAxis =true, vector3D extraVec = vector3D(0,0,0));
+    void rotateWithStaticOrient(double angle, char axis);
 
     vector3D getCorner(int i) { return this->_vertexes[i]; };
     vector3D getMidPoint() { return this->_midPoint; }
@@ -36,3 +39,6 @@ public:
         this->_vertexes.shrink_to_fit();
     }
 };
+
+
+#endif //GEOMMETRIC_OBJ_HPP

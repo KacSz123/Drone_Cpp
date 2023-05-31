@@ -1,7 +1,7 @@
 __start__: clean_screen _free_lines_  clean  _horizontal_line_ all _horizontal_line2_ __end__ #run
 INCLUDEPATH += inc/
-CFLAGS = -g -I$(INCLUDEPATH) -Wall -pedantic -std=c++0x# tutaj można dodawać inne flagi kompilatora
-LIBS =  #tutaj można dodawać biblioteki
+CFLAGS = -g -I$(INCLUDEPATH) -Wall -pedantic -std=c++0x# compilators flags
+LIBS =  #libs flags
 OUT=Program
 bold := $(shell tput bold)
 sgr0 := $(shell tput sgr0)
@@ -22,7 +22,7 @@ __end__:
 	@echo "Uruchom plik $(bold)${OUT}$(sgr0) w celu przetestowania programu"  
 	@echo  ""
 	
-all: OBJ/vector2d.o OBJ/matrix2x2.o OBJ/geometric_obj.o OBJ/cuboid.o OBJ/hexagonal_prism.o OBJ/drone.o OBJ/gnuplot_link.o OBJ/main.o
+all: OBJ/vector2d.o OBJ/matrix2x2.o OBJ/geometric_obj.o OBJ/scene_obj.o OBJ/cuboid.o OBJ/hexagonal_prism.o OBJ/drone.o OBJ/gnuplot_link.o OBJ/main.o
 	@echo "\e[42mKompilacja i konsolidacja programu\e[49m"
 	g++ -Wall -pedantic -std=c++0x -o ${OUT} OBJ/main.o OBJ/cuboid.o OBJ/vector2d.o OBJ/matrix2x2.o OBJ/gnuplot_link.o  OBJ/geometric_obj.o OBJ/hexagonal_prism.o OBJ/drone.o 
 
@@ -67,34 +67,41 @@ OBJ/geometric_obj.o:  src/geometric_obj.cpp inc/geometric_obj.hpp inc/matrix2x2.
 	g++ -c ${CFLAGS} src/geometric_obj.cpp -o OBJ/geometric_obj.o
 	@echo
 	@echo
+OBJ/scene_obj.o:  src/scene_obj.cpp inc/scene_obj.hpp inc/matrix2x2.hpp inc/vector2d.hpp  inc/drone.hpp
+	@echo "\e[44mKompilacja pliku $(bold)scene_obj.cpp$(sgr0)\e[49m"
+	g++ -c ${CFLAGS} src/scene_obj.cpp -o OBJ/scene_obj.o
+	@echo
+	@echo
 OBJ/main.o: src/main.cpp inc/cuboid.hpp inc/vector2d.hpp inc/matrix2x2.hpp inc/gnuplot_link.hpp inc/hexagonal_prism.hpp inc/drone.hpp
 	@echo "\e[44mKompilacja pliku $(bold)main.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/main.cpp -o OBJ/main.o
 	@echo
 	@echo
 
-
-# OBJ/image.o: src/image.c inc/image.h
-# 	@echo "Kompilacja pliku $(bold)Image.c$(sgr0)"
-# 	@echo
-# 	g++ -c ${CFLAGS} src/image.c -o OBJ/image.o
-# 	@echo
-# 	@echo
-
-clean:
+number_of_files=$(ls -A OBJ | wc -l)
+clean:	
+	@echo "Removing old $(bold) *.o$(sgr0) files"
+	@if test -d OBJ; then echo "$(bold)OBJ $(sgr0)directory found"; else echo "$(bold)OBJ $(sgr0) not found... creating" && mkdir OBJ; fi;
+	@[ -f OBJ/vector2d.o ] && rm OBJ/vector2d.o && echo "rm $(bold) vector2d.o$(sgr0)" || echo no  " **$(bold) vector2d.o doesn't exist$(sgr0) **"
+	@[ -f OBJ/matrix2x2.o ] && rm OBJ/matrix2x2.o && echo "rm $(bold) matrix2x2.o$(sgr0)" || echo  " **$(bold) matrix2x2.o doesn't exist$(sgr0) **"
+	@[ -f OBJ/geometric_obj.o ] && rm OBJ/geometric_obj.o && echo "rm $(bold) geometric_obj.o$(sgr0)" || echo " **$(bold) geometric_obj.o doesn't exist$(sgr0) **"
+	@[ -f OBJ/scene_obj.o ] && rm OBJ/scene_obj.o && echo "rm $(bold) scene_obj.o$(sgr0)" || echo " **$(bold) scene_obj.o doesn't exist$(sgr0) **"
+	@[ -f OBJ/cuboid.o ] && rm OBJ/cuboid.o && echo "rm $(bold) cuboid.o$(sgr0)" || echo  " **$(bold) cuboid.o doesn't exist$(sgr0) **"
+	@[ -f OBJ/drone.o ] && rm OBJ/drone.o && echo "rm $(bold) drone.o$(sgr0)" || echo  " **$(bold) drone.o doesn't exist$(sgr0) **"
+	@[ -f OBJ/hexagonal_prism.o ] && rm OBJ/hexagonal_prism.o && echo "rm $(bold) hexagonal_prism.o$(sgr0)" || echo  "$(bold) hexagonal_prism.o doesn't exist$(sgr0) **"
+	@[ -f OBJ/scene.o ] && rm OBJ/scene.o && echo "rm $(bold) scene.o$(sgr0)" || echo   " **$(bold) scene.o doesn't exist$(sgr0) **"
+	@[ -f OBJ/gnuplot_link.o ] && rm OBJ/gnuplot_link.o && echo "rm $(bold) gnuplot_link.o$(sgr0)" || echo  " **$(bold) gnuplot_link.o doesn't exist$(sgr0) **"
+	@[ -f OBJ/main.o ] && rm OBJ/main.o && echo "rm $(bold) main.o$(sgr0)" || echo " **$(bold) main.o doesn't exist$(sgr0) **"
 	
-	@echo "\e[40mUsuwanie plikow $(bold)*.o$(sgr0) w katalogu $(bold)OBJ$(sgr0)\e[49m"
-	rm -f OBJ/*
-# @echo "$(bold)Usuwanie$(sgr0) katalogu$(bold) OBJ$(sgr0)"
-# rmdir OBJ
-
+	
 clean_exec:
 	rm Program
 
-obj: 
-	@echo "\e[40mTworzenie katalogu$(bold) OBJ$(sgr0)\e[49m"
-	mkdir OBJ
-	@echo
+obj: 	
+	@if [ ls -d OBJ ]; then\
+		echo "OBJ directory found";\
+	else echo "Making the $(bold) OBJ$(sgr0) directory" && mkdir OBJ;\
+    fi
 
 run: clean_screen go
 

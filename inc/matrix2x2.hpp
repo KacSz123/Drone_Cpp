@@ -1,4 +1,7 @@
-#pragma once
+#ifndef MATRIX_HPP
+#define MATRIX_HPP
+
+
 #include "vector2d.hpp"
 #include <iostream>
 #include <cmath>
@@ -233,3 +236,5 @@ bool operator==(Matrix2x2<T, Size> m1, T a)
 }
 // template <typename T, unsigned int Size>
 typedef Matrix2x2<double,3> Matrix3x3;
+
+#endif //MATRIX_HPP

@@ -262,11 +262,17 @@ void addToDrawingList(PzG::GnuplotLink &l, const char *name)
 }
 int main()
 {
-       Vector2d<double, 3> vMid;
+       const int delay = 10000;
+       Vector2d<double, 3> vMid,vMid2,vMid3;
 
-       vMid.setCoords(0.0, 0.0, 0.0);
+       vMid.setCoords(-75.0, -75.0, 0.0);
+       vMid2.setCoords(100.0, -60.0, 20.0);
+       vMid3.setCoords(100.0, 100.0, -20.0);
 
        Drone d(vMid);
+       Drone d2(vMid2, 0.6);
+       Drone d3(vMid3,1.7);
+
   // rysunku prostokata
        PzG::GnuplotLink link1;                 // Ta zmienna jest potrzebna do wizualizacji
        link1.SetDrawingMode(PzG::DM_3D);
@@ -277,6 +283,18 @@ int main()
        link1.AddFilename(d[2].c_str(), PzG::LS_CONTINUOUS, 2);
        link1.AddFilename(d[3].c_str(), PzG::LS_CONTINUOUS, 2);
        link1.AddFilename(d[4].c_str(), PzG::LS_CONTINUOUS, 2);
+
+       link1.AddFilename(d2[0].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d2[1].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d2[2].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d2[3].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d2[4].c_str(), PzG::LS_CONTINUOUS, 2);
+
+       link1.AddFilename(d3[0].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d3[1].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d3[2].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d3[3].c_str(), PzG::LS_CONTINUOUS, 2);
+       link1.AddFilename(d3[4].c_str(), PzG::LS_CONTINUOUS, 2);
        
 
        // link1.
@@ -310,48 +328,180 @@ int main()
        if (!WriteToFileExample(d.getRotor(3), d[4].c_str()))
               return 1;
        
-       sleep(1);
+       // sleep(1);
+       // link1.Draw();
+
+       if (!WriteToFileExample(d2.getBody(), d2[0].c_str()))
+              return 1;
+       if (!WriteToFileExample(d2.getRotor(0), d2[1].c_str()))
+              return 1;
+       if (!WriteToFileExample(d2.getRotor(1), d2[2].c_str()))
+              return 1;
+       if (!WriteToFileExample(d2.getRotor(2), d2[3].c_str()))
+              return 1;
+       if (!WriteToFileExample(d2.getRotor(3), d2[4].c_str()))
+              return 1;
+
+
+       if (!WriteToFileExample(d3.getBody(), d3[0].c_str()))
+              return 1;
+       if (!WriteToFileExample(d3.getRotor(0), d3[1].c_str()))
+              return 1;
+       if (!WriteToFileExample(d3.getRotor(1), d3[2].c_str()))
+              return 1;
+       if (!WriteToFileExample(d3.getRotor(2), d3[3].c_str()))
+              return 1;
+       if (!WriteToFileExample(d3.getRotor(3), d3[4].c_str()))
+              return 1;
+
        link1.Draw();
-
        sleep(1);
-for(int i=0;i<100;++i)
-{ 
-       d.moveDrone(1);
-       usleep(500);
-              if (!WriteToFileExample(d.getBody(), d[0].c_str()))
-              return 1;
+// std::cout<<"MID POINTS!!!-\n";
+// std::cout<<"body mpt: "<<d.getBody().getMidPoint()<<std::endl;
+// std::cout<<"r1 mpt: "<<d.getRotor(0).getMidPoint()<<std::endl;
+// std::cout<<"r2 mpt: "<<d.getRotor(1).getMidPoint()<<std::endl;
+// std::cout<<"r3 mpt: "<<d.getRotor(2).getMidPoint()<<std::endl;
+// std::cout<<"r4 mpt: "<<d.getRotor(3).getMidPoint()<<std::endl;
+// std::cout<<"ORIENTATION!!!-\n";
+// std::cout<<"body mpt: \n"<<d.getBody().getOrientation()<<std::endl;
+// std::cout<<"r1 mpt: \n"<<d.getRotor(0).getOrientation()<<std::endl;
+// std::cout<<"r2 mpt: \n"<<d.getRotor(1).getOrientation()<<std::endl;
+// std::cout<<"r3 mpt: \n"<<d.getRotor(2).getOrientation()<<std::endl;
+// std::cout<<"r4 mpt: \n"<<d.getRotor(3).getOrientation()<<std::endl;
+// for(int i=0;i<200;++i)
+// { 
+//        d.moveDrone(1);
+//        usleep(500);
+//               if (!WriteToFileExample(d.getBody(), d[0].c_str()))
+//               return 1;
 
-       if (!WriteToFileExample(d.getRotor(0), d[1].c_str()))
-              return 1;
+//        if (!WriteToFileExample(d.getRotor(0), d[1].c_str()))
+//               return 1;
 
-       if (!WriteToFileExample(d.getRotor(1), d[2].c_str()))
-              return 1;
+//        if (!WriteToFileExample(d.getRotor(1), d[2].c_str()))
+//               return 1;
 
-       if (!WriteToFileExample(d.getRotor(2), d[3].c_str()))
-              return 1;
-       if (!WriteToFileExample(d.getRotor(3), d[4].c_str()))
-              return 1;
-       usleep(500);
+//        if (!WriteToFileExample(d.getRotor(2), d[3].c_str()))
+//               return 1;
+//        if (!WriteToFileExample(d.getRotor(3), d[4].c_str()))
+//               return 1;
+//        usleep(500);
 
-       link1.Draw();
-       usleep(500);
-       }
+//        link1.Draw();
+//        usleep(500);
+//        }
+// std::cout<<"MID POINTS!!!-\n";
+// std::cout<<"body mpt: "<<d.getBody().getMidPoint()<<std::endl;
+// std::cout<<"r1 mpt: "<<d.getRotor(0).getMidPoint()<<std::endl;
+// std::cout<<"r2 mpt: "<<d.getRotor(1).getMidPoint()<<std::endl;
+// std::cout<<"r3 mpt: "<<d.getRotor(2).getMidPoint()<<std::endl;
+// std::cout<<"r4 mpt: "<<d.getRotor(3).getMidPoint()<<std::endl;
+// std::cout<<"ORIENTATION!!!-\n";
+// std::cout<<"body mpt: \n"<<d.getBody().getOrientation()<<std::endl;
+// std::cout<<"r1 mpt: \n"<<d.getRotor(0).getOrientation()<<std::endl;
+// std::cout<<"r2 mpt: \n"<<d.getRotor(1).getOrientation()<<std::endl;
+// std::cout<<"r3 mpt: \n"<<d.getRotor(2).getOrientation()<<std::endl;
+// std::cout<<"r4 mpt: \n"<<d.getRotor(3).getOrientation()<<std::endl;
+// getchar();
+// for(int i=0;i<100;++i)
+// { 
+//        d.soarDrone(1,45);
+//        usleep(500);
+//               if (!WriteToFileExample(d.getBody(), d[0].c_str()))
+//               return 1;
 
-       //        link1.Draw();
-       //        sleep(1);
-       //     rotate_rect_anim(rect, 90, link1,f1,'Y');
-       //        sleep(1);
-       //     rotate_rect_anim(rect3, -90, link1,f3, 'Z');
-       //        sleep(1);
-       //        moveC(rect2, 100, link1,f2);
-       //        sleep(1);
-       //        moveC(rect, 100, link1,f1);
-       //     rotate_rect_anim(rect2, 90, link1,f2,'Y');
-       //        sleep(1);
-       // moveC(hex, 100, link1,f2);
-       // rotate_rect_anim(hex,45.0,link1,f2,'Z');
-       // moveC(hex, 100, link1,f2);
-       // cout<<hex.getMidPoint()<<endl;
-        getchar();
-        return 0;
+//        if (!WriteToFileExample(d.getRotor(0), d[1].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(1), d[2].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(2), d[3].c_str()))
+//               return 1;
+//        if (!WriteToFileExample(d.getRotor(3), d[4].c_str()))
+//               return 1;
+//        usleep(500);
+
+//        link1.Draw();
+//        usleep(500);
+//        }
+getchar();
+// for(int i=0;i<150;++i)
+// { 
+//        d.moveDrone(1,1, 5);
+//        usleep(500);
+//               if (!WriteToFileExample(d.getBody(), d[0].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(0), d[1].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(1), d[2].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(2), d[3].c_str()))
+//               return 1;
+//        if (!WriteToFileExample(d.getRotor(3), d[4].c_str()))
+//               return 1;
+//        usleep(delay);
+
+//        link1.Draw();
+//        usleep(delay);
+//        std::cout<<"1\n";
+//        }
+
+//  getchar();
+// for(int i=0;i<150;++i)
+// { 
+//        d.moveDrone(1,1,1);
+//        usleep(500);
+//               if (!WriteToFileExample(d.getBody(), d[0].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(0), d[1].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(1), d[2].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(2), d[3].c_str()))
+//               return 1;
+//        if (!WriteToFileExample(d.getRotor(3), d[4].c_str()))
+//               return 1;
+//        usleep(delay);
+
+//        link1.Draw();
+//        usleep(delay);
+//        std::cout<<"1\n";
+//        }
+
+//  getchar();
+// for(int i=0;i<100;++i)
+// { 
+//        d.rotateDrone(-0.5);
+//        usleep(500);
+//               if (!WriteToFileExample(d.getBody(), d[0].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(0), d[1].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(1), d[2].c_str()))
+//               return 1;
+
+//        if (!WriteToFileExample(d.getRotor(2), d[3].c_str()))
+//               return 1;
+//        if (!WriteToFileExample(d.getRotor(3), d[4].c_str()))
+//               return 1;
+//        usleep(delay);
+
+//        link1.Draw();
+//        usleep(delay);
+//        }
+
+
+//         getchar();
+//         return 0;
+// 
 }
+

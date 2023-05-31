@@ -7,8 +7,10 @@
 
 Cuboid::Cuboid(vector3D midPt, double lenX, double lenY, double lenZ):GeometricObj(8)
 {
+
+    // std::cout<<midPt<<std::endl;
     this->setMidPoint(midPt);
-    
+    // std::cout<<this->getMidPoint()<<std::endl;
     this->setVertexCoords(0, midPt[0] + lenX / 2, midPt[1] - lenY / 2, midPt[2] + lenZ / 2);
     this->setVertexCoords(1, midPt[0] + lenX / 2, midPt[1] + lenY / 2, midPt[2] + lenZ / 2);
     this->setVertexCoords(6, midPt[0] - lenX / 2, midPt[1] - lenY / 2, midPt[2] + lenZ / 2);
@@ -40,10 +42,15 @@ std::ostream &operator<<(std::ostream &strm, Cuboid rect)
          << rect.getCorner(0) << "\n"
          << rect.getCorner(1) << "\n"
          << (*mRight) << "\n";
+    
+    // cleaning up
     delete mLeft;
     delete mRight;
     delete x;
     delete y;
     delete m;
+
+
+
     return strm;
 }
