@@ -21,6 +21,7 @@ public:
     void getXrotationMatrix(const double angle);
     void getYrotationMatrix(const double angle);
     void getZrotationMatrix(const double angle);
+    static Matrix2x2<T,Size> getIdentityMatrix(){Matrix2x2<T,Size> m; for(uint i =0; i<Size; ++i) m(i,i)=1; return m;};
     friend std::istream &operator>>(std::istream &istrm, Matrix2x2<T, Size> &matrixx)
     {
         T val = 0;

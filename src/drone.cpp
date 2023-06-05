@@ -11,53 +11,48 @@ inline static double toRadians(const double radians)
 }
 Drone::Drone(vector3D midPoint, double scale) : _ID(++_droneNo)
 {
-    vector3D *midPt = new vector3D(midPoint);
 
-    this->_body = new Cuboid(*midPt, 60*scale, 60*scale, 30*scale);
-    // std::cout<<*(this->_body)<<"\n";
-    vector3D *tmpVec;
-    HexagonalPrism *tmpHex;
+    vector3D midPt(midPoint);
+    _body = Cuboid(midPt, _basicBodyW * scale, _basicBodyL * scale, _basicBodyH * scale);
+    vector3D tmpVec(0, 0, 0);
+    HexagonalPrism *tmpHex = new HexagonalPrism();
     for (int i = 0; i < 2; ++i)
     {
-        tmpVec = new vector3D(0, 0, 10*scale);
-        *tmpVec = *tmpVec + this->_body->getCorner(i);
-        tmpHex = new HexagonalPrism(*tmpVec, 20*scale, 25*scale);
-        tmpHex->setOrientation(_body->getOrientation());
+        tmpVec.setCoords(0, 0, 10 * scale);
+        tmpVec = tmpVec + _body.getCorner(i);
+        *tmpHex = HexagonalPrism(tmpVec, _basicRotorH * scale, _basicRotorR * scale);
+        tmpHex->setOrientation(_body.getOrientation());
         this->_rotors.push_back(*tmpHex);
-
-        delete tmpHex;
-        delete tmpVec;
     }
     for (int i = 6; i < 8; ++i)
     {
-        vector3D *tmp2Vec = new vector3D(0, 0, 10*scale);
-        //  std::cout<<this->_body->getCorner(i)<<"---\n";
-        *tmp2Vec = *tmp2Vec + this->_body->getCorner(i);
-        HexagonalPrism *tmp2Hex = new HexagonalPrism(*tmp2Vec, 20*scale, 25*scale);
-        tmp2Hex->setOrientation(_body->getOrientation());
-        this->_rotors.push_back(*tmp2Hex);
-
-        delete tmp2Hex;
-        delete tmp2Vec;
+        tmpVec.setCoords(0, 0, 10 * scale);
+        //  std::cout<<_body.getCorner(i)<<"---\n";
+        tmpVec = tmpVec + _body.getCorner(i);
+        *tmpHex = HexagonalPrism(tmpVec, _basicRotorH * scale, _basicRotorR * scale);
+        tmpHex->setOrientation(_body.getOrientation());
+        this->_rotors.push_back(*tmpHex);
     }
+    delete tmpHex;
+    // delete tmpVec;
 
-    this->_midPoint = new vector3D;
-    this->_midPoint->setCoords(midPt->getCoord(0), midPt->getCoord(1), midPt->getCoord(2) + 25);
+    _midPoint.setCoords(midPt.getCoord(0), midPt.getCoord(1),
+                        midPt.getCoord(2) + (_basicRotorH * scale) / 2.0);
 
     this->generateNames();
-    // this->printNamesOnStd();
+    std::cout << "skala: " << scale << "\n";
 }
 Drone::Drone() : _ID(++_droneNo) {}
 void Drone::generateNames()
 {
     string *str1 = new string("");
-    *str1 = string(DATA_DIR) + "Drone_" + to_string(_ID) + "_body";
+    *str1 = string(DATA_DIR) + "Drone_" + to_string(_ID) + "_body.dat";
     this->fileNames.push_back(*str1);
 
     str1->clear();
     for (int i = 1; i < 5; ++i)
     {
-        *str1 = string(DATA_DIR) + "Drone_" + to_string(_ID) + "_rotor" + to_string(i);
+        *str1 = string(DATA_DIR) + "Drone_" + to_string(_ID) + "_rotor.dat" + to_string(i);
         this->fileNames.push_back(*str1);
         str1->clear();
     }
@@ -71,21 +66,21 @@ void Drone::printNamesOnStd()
 }
 void Drone::moveDrone(double x, double speed, double rotorsSpeed)
 {
-    _body->moveForward(x);
+    _body.moveForward(x);
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); ++i)
         i->moveForward(x);
-    this->spinRotors(x,rotorsSpeed);
+    this->spinRotors(x, rotorsSpeed);
 }
 
 void Drone::soarDrone(const double pathLen, const double angle, double speed, double rotorsSpeed)
 {
     double const x = pathLen * cos(toRadians(angle));
     double const z = pathLen * sin(toRadians(angle));
-    _body->soarForward(x, z);
+    _body.soarForward(x, z);
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); i++)
         i->soarForward(x, z);
 
-    this->spinRotors(pathLen,rotorsSpeed);
+    this->spinRotors(pathLen, rotorsSpeed);
 }
 
 void Drone::spinRotors(const double distance, double speed, bool direction)
@@ -98,19 +93,20 @@ void Drone::spinRotors(const double distance, double speed, bool direction)
     {
         // std::cout<<"op1\n";
         rotParam = -1;
-        vel = new double[4]{rotParam * speed * velDiff, -rotParam * speed, -rotParam * speed , rotParam * speed*velDiff};
+        vel = new double[4]{rotParam * speed * velDiff, -rotParam * speed, -rotParam * speed, rotParam * speed * velDiff};
     }
     else if (direction && distance == 0)
     {
         // std::cout<<"op2\n";
         rotParam = 1;
-        vel = new double[4]{-rotParam * speed, -rotParam * speed*velDiff, -rotParam * speed*velDiff, rotParam * speed };
+        vel = new double[4]{-rotParam * speed, -rotParam * speed * velDiff, -rotParam * speed * velDiff, rotParam * speed};
     }
-    else{
-        rotParam = distance*2;
+    else
+    {
+        rotParam = distance * 2;
         // std::cout<<"esle\n";
-        vel = new double[4]{rotParam * speed, -rotParam * speed, -rotParam * speed, rotParam*speed};
-}
+        vel = new double[4]{rotParam * speed, -rotParam * speed, -rotParam * speed, rotParam * speed};
+    }
     for (uint i = 0; i < _rotors.size(); ++i)
         _rotors[i].rotateWithStaticOrient(vel[i], 'z');
     delete vel;
@@ -118,16 +114,58 @@ void Drone::spinRotors(const double distance, double speed, bool direction)
 
 void Drone::rotateDrone(double angle, double speed, double rotorsSpeed)
 {
-    // this->getMidPoint()
-    _body->rotate(angle, 'z');
+    _body.rotate(angle, 'z');
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); ++i)
     {
-        i->setOrientation(_body->getOrientation());
+        i->setOrientation(_body.getOrientation());
         i->rotate(angle, 'z', false, this->getMidPoint());
     }
 
-    if(angle>=0)
-        this->spinRotors(0,rotorsSpeed);
+    if (angle >= 0)
+        this->spinRotors(0, rotorsSpeed);
     else
-        this->spinRotors(0,rotorsSpeed,false);
+        this->spinRotors(0, rotorsSpeed, false);
+}
+
+double Drone::getXYDistance(const SceneObj *another) const
+{
+    return 0;
+}
+double Drone::getZDistance(const SceneObj *another) const
+{
+    return 0;
+}
+
+void Drone::writeToFiles()
+{
+
+    if (!_body.writeToFile((*this)[0]))
+        exit(1);
+
+    for (int i = 1; i < 5; ++i)
+    {
+        if (!_rotors[i - 1].writeToFile((*this)[i]))
+            exit(1);
+    }
+}
+
+Drone::Drone(const Drone &d) : _ID{d.getID()}
+{
+
+    std::cout << "debug01  - con cop\n";
+    this->_body = d.getBody();
+    std::cout << "debug02  - con cop\n";
+    //    std::cout<<<<"\n";
+    fileNames.push_back(d[0]);
+    std::cout << "debug03  - con cop\n";
+    _midPoint = d.getMidPoint();
+    std::cout << "debug04  - con cop\n";
+    for (int i = 0; i < 4; ++i)
+    {
+        std::cout << "debug051  - con cop\n";
+        this->_rotors.push_back(d.getRotor(i));
+
+        std::cout << "debug052  - con cop\n";
+        fileNames.push_back(d[i + 1]);
+    }
 }

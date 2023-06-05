@@ -7,47 +7,34 @@
 
 #include"vector2d.hpp"
 
+
+
 class SceneObj
 {
 private:
+protected:
+    static uint _allSceneObjectCounter;
+    static uint _existingSceneObjectCounter;
+
     double _circleRadius;
     double _heightRange;
 
 public:
 
-    SceneObj(/* args */);
+    SceneObj();
     ~SceneObj();
     
     double getCircleRadius()const {return _circleRadius;}
-    double getHeight()const {return _heightRange;}
-    virtual  double getXYDistance(const SceneObj & anotherObj)const = 0;
-    virtual  double getZDistance(const SceneObj & anotherObj)const = 0;
-    bool ifDetectedCollision(const SceneObj & anotherObj) const;
+    double getHeight()const {return _heightRange;}  
+      static void printCounters()
+    {
+        std::cout << "No. of all created SceneObj<>: " << _allSceneObjectCounter
+         << ";\n No. of existing SceneObj<>: " << _existingSceneObjectCounter << std::endl;
+    }
+    // virtual  double getXYDistance(const SceneObj & anotherObj)const = 0;
+    // virtual  double getZDistance(const SceneObj & anotherObj)const = 0;
+    // bool ifDetectedCollision(const SceneObj & anotherObj) const;
 };
-
-
-
-SceneObj::SceneObj(/* args */)
-{
-}
-
-SceneObj::~SceneObj()
-{
-}
-
-
-bool SceneObj::ifDetectedCollision(const SceneObj & anotherObj)const
-{
-    const double xyDistance = anotherObj.getXYDistance(*this);
-    const double zDistance = anotherObj.getZDistance(*this);
-
-    return (xyDistance<this->getCircleRadius());
-}
-
-
-
-
-
 
 
 
