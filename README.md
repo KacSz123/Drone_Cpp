@@ -6,4 +6,4 @@ Program executes Drone Controll task with visualisation in Gnuplot (visualisatio
 
 Program extends concept of objects representation into 3Dimensionall space. There is possibility to rotate and move few objects independently.
 
-
+waiting for merge
