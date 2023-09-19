@@ -17,7 +17,7 @@ CuboidObstacle::CuboidObstacle():_ID{++_cuboidObstCntr}
 }
 CuboidObstacle::CuboidObstacle(vector3D&v,double x, double y,double z):_ID{++_cuboidObstCntr}
 {
-_obstacle=Cuboid(v,x,y,z);
+_obstacle=Cuboid(v,x,y,z,y/2);
 _filename =  std::string(DATA_DIR) + "cub_obst_" + std::to_string(_cuboidObstCntr);
 setPosition(_obstacle.getMidPoint());
     _x=x;

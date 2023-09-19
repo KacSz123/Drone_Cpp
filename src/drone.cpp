@@ -5,7 +5,7 @@
 using namespace std;
 unsigned int Drone::_droneNo = 0;
 // static inline double toRad
-inline static double toRadians(const double radians)
+inline  double toRadians(const double radians)
 {
     return radians * (M_PI / 180);
 }
@@ -56,7 +56,7 @@ void Drone::generateNames()
     str1->clear();
     for (int i = 1; i < 5; ++i)
     {
-        *str1 = string(DATA_DIR) + "Drone_" + to_string(_ID) + "_rotor.dat" + to_string(i);
+        *str1 = string(DATA_DIR) + "Drone_" + to_string(_ID) + "_rotor"+ to_string(i)+".dat" ;
         this->fileNames.push_back(*str1);
         str1->clear();
     }
@@ -90,8 +90,10 @@ void Drone::soarDrone(const double pathLen, const double angle, double speed, do
     double const z = pathLen * sin(toRadians(angle));
     _body.soarForward(x, z);
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); i++)
-        i->soarForward(x, z);
-
+        {
+            i->setOrientation(_body.getOrientation());
+            i->soarForward(x, z);
+        }
     this->spinRotors(pathLen, rotorsSpeed);
 }
 
@@ -129,8 +131,8 @@ void Drone::rotateDrone(double angle, double speed, double rotorsSpeed)
     _body.rotate(angle, 'z',true, _body.getMidPoint());
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); ++i)
     {
-        i->setOrientation(_body.getOrientation());
         i->rotate(angle, 'z', false, this->getBody().getMidPoint());
+        i->setOrientation(_body.getOrientation());
     }
     
     if (angle >= 0)
@@ -139,14 +141,7 @@ void Drone::rotateDrone(double angle, double speed, double rotorsSpeed)
         this->spinRotors(0, rotorsSpeed, false);
 }
 
-double Drone::getXYDistance(const SceneObj *another) const
-{
-    return 0;
-}
-double Drone::getZDistance(const SceneObj *another) const
-{
-    return 0;
-}
+
 
 void Drone::writeToFiles()
 {

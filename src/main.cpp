@@ -8,16 +8,6 @@
 #include "scene.hpp"
 using namespace std;
 
-/*
- * Tu definiujemy pozostale funkcje.
- * Lepiej jednak stworzyc dodatkowy modul
- * i tam je umiescic. Ten przyklad pokazuje
- * jedynie absolutne minimum.
- */
-
-const int kShorterEdgesLength = 10;
-const int kLongerEdgesLength = 150;
-
 
 
 
@@ -27,9 +17,9 @@ int main()
        // const int delay = 10000;
 
        // Drone a = Drone(vector3D(0,0,0));
-       Vector2d<double, 3> *vMid=new vector3D(0.0, 0.0, 0.0);
+       Vector2d<double, 3> *vMid3=new vector3D(0.0, 0.0, 0.0);
        Vector2d<double, 3> *vMid2=new vector3D(-170.0, 0.0, 0.0);
-       Vector2d<double, 3> *vMid3=new vector3D(0.0, 250.0, 0.0);
+       Vector2d<double, 3> *vMid=new vector3D(0.0, 250.0, 0.0);
        vector3D *tab = new vector3D[3]{*vMid,*vMid2,*vMid3};
 
 
@@ -62,7 +52,11 @@ int main()
        sc->activateDrone(1);
 
        sc->rotateActiveDrone(-45);
+       getchar();
+
        sc->moveActiveDroneForward(130);
+       getchar();
+       sc->soarActiveDrone(200, -30);
        // sc->checkColision(0);
        getchar();
        delete sc;
