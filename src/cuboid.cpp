@@ -4,7 +4,7 @@
 #include "cuboid.hpp"
 #include "geometric_obj.hpp"
 #include <fstream>
-Cuboid::Cuboid(const vector3D &midPt,const double lenX, const double lenY,const double lenZ) : GeometricObj(8)
+Cuboid::Cuboid(const vector3D &midPt,const double lenX, const double lenY,const double lenZ, const double y) : GeometricObj(8), y{y}
 {
 
     // std::cout<<midPt<<std::endl;
@@ -26,9 +26,16 @@ std::ostream &operator<<(std::ostream &strm, Cuboid &rect)
     (*x) = rect.getCorner(0);
     (*y) = rect.getCorner(1);
     (*m) = rect.getMidPoint();
+    
+    vector3D *mLeft = new vector3D((*m)[0], (*m)[1]-rect.getY(), (*m)[2]), *mRight = new vector3D((*m)[0],  (*m)[1]+rect.getY(), (*m)[2]);
+    Matrix3x3 ma=rect.getOrientation();
+    (*mLeft) = (*mLeft) - rect.getMidPoint();
+    (*mLeft) = ma*(*mLeft);
+    (*mLeft) = (*mLeft) + rect.getMidPoint();
 
-    vector3D *mLeft = new vector3D((*m)[0], (*x)[1], (*m)[2]), *mRight = new vector3D((*m)[0], (*y)[1], (*m)[2]);
-
+    (*mRight) = (*mRight) - rect.getMidPoint();
+    (*mRight) = ma*(*mRight);
+    (*mRight) = (*mRight) + rect.getMidPoint();
     for (int i = 0; i < 8; ++i)
     {
         if (i % 2 == 0)

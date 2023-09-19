@@ -11,10 +11,11 @@ class Cuboid : public GeometricObj //,public SceneObj
 
 private:
     std::list<vector3D> _flyPath;
+    double y;
 public:
     Cuboid() : GeometricObj(8){};
-    Cuboid(const vector3D &, const double, const double, const double);
-
+    Cuboid(const vector3D &, const double, const double, const double,const double y=30);
+    double getY()const{return y;}
     void printVertexes()
     {
         for (VertexVec::iterator i = _vertexes.begin(); i != _vertexes.end(); ++i)

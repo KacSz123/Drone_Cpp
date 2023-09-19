@@ -55,10 +55,13 @@ int main()
        sc->activateDrone(0);
        getchar();
        sc->moveActiveDroneForward(130);
+       getchar();
+       
        sc->rotateActiveDrone(45);
        getchar();
        sc->activateDrone(1);
-       sc->rotateActiveDrone(45);
+
+       sc->rotateActiveDrone(-45);
        sc->moveActiveDroneForward(130);
        // sc->checkColision(0);
        getchar();

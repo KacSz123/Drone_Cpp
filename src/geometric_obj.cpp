@@ -85,9 +85,12 @@ for(VertexVec::iterator i = this->_vertexes.begin(); i!=this->_vertexes.end(); +
             *i = *i+extraVec;
         }
     }
+            if(!aroundOwnAxis) 
+            {
             this->setMidPoint(this->getMidPoint() - extraVec);
             this->setMidPoint(m*this->getMidPoint());
             this->setMidPoint(this->getMidPoint() + extraVec);
+            }
 }
 
 

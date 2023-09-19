@@ -13,7 +13,7 @@ Drone::Drone(vector3D midPoint, double scale):SceneObj{}, _ID(++_droneNo)
 {
 
     vector3D midPt(midPoint);
-    _body = Cuboid(midPt, _basicBodyW * scale, _basicBodyL * scale, _basicBodyH * scale);
+    _body = Cuboid(midPt, _basicBodyW * scale, _basicBodyL * scale, _basicBodyH * scale,_basicBodyL*scale/2);
     vector3D tmpVec(0, 0, 0);
     HexagonalPrism *tmpHex = new HexagonalPrism();
     for (int i = 0; i < 2; ++i)
@@ -126,7 +126,7 @@ void Drone::spinRotors(const double distance, double speed, bool direction)
 
 void Drone::rotateDrone(double angle, double speed, double rotorsSpeed)
 {
-    _body.rotate(angle, 'z');
+    _body.rotate(angle, 'z',true, _body.getMidPoint());
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); ++i)
     {
         i->setOrientation(_body.getOrientation());
