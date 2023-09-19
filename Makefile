@@ -88,7 +88,7 @@ OBJ/cuboid_obstacle.o:  src/cuboid_obstacle.cpp inc/cuboid_obstacle.hpp inc/matr
 	g++ -c ${CFLAGS} src/cuboid_obstacle.cpp -o OBJ/cuboid_obstacle.o
 	@echo
 	@echo
-OBJ/main.o: src/main.cpp inc/cuboid.hpp inc/vector2d.hpp inc/matrix2x2.hpp inc/gnuplot_link.hpp inc/hexagonal_prism.hpp inc/drone.hpp inc/scene_obj.hpp
+OBJ/main.o: src/main.cpp inc/cuboid.hpp inc/vector2d.hpp inc/matrix2x2.hpp  inc/hexagonal_prism.hpp inc/drone.hpp inc/scene_obj.hpp
 	@echo "\e[44mKompilacja pliku $(bold)main.cpp$(sgr0)\e[49m"
 	g++ -c ${CFLAGS} src/main.cpp -o OBJ/main.o
 	@echo

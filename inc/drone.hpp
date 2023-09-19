@@ -50,10 +50,12 @@ class Drone: public SceneObj
         // void rotateDroneAnimation(const double angle);
         double getXYDistance(const SceneObj*) const;
         double getZDistance(const SceneObj*) const;
+        void setMidPoint(vector3D& a){this->_midPoint=a;}
         void printBody(){_body.printVertexes();};
         void writeToFiles();
         HexagonalPrism getRotor(int i)const {return _rotors[i];}
         uint getID()const{return _ID;}
+        // ifDetectedCollision(const SceneObj & anotherObj) const {return false;};
 };
 
 #endif //DRONE_HPP

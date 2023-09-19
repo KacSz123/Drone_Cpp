@@ -4,14 +4,17 @@
 #include "vector2d.hpp"
 #include "matrix2x2.hpp"
 #include "geometric_obj.hpp"
+#include <list>
 // #include "scene_obj.hpp"
 class Cuboid : public GeometricObj //,public SceneObj
 {
 
 private:
+    std::list<vector3D> _flyPath;
 public:
     Cuboid() : GeometricObj(8){};
     Cuboid(const vector3D &, const double, const double, const double);
+
     void printVertexes()
     {
         for (VertexVec::iterator i = _vertexes.begin(); i != _vertexes.end(); ++i)

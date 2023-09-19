@@ -54,7 +54,6 @@ std::ostream &operator<<(std::ostream &strm, Cuboid &rect)
 
 bool Cuboid::writeToFile(const std::string &filename)
 {
-
     using namespace std;
     ofstream file_stream;
     file_stream.open(filename);

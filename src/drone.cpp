@@ -9,7 +9,7 @@ inline static double toRadians(const double radians)
 {
     return radians * (M_PI / 180);
 }
-Drone::Drone(vector3D midPoint, double scale) : _ID(++_droneNo)
+Drone::Drone(vector3D midPoint, double scale):SceneObj{}, _ID(++_droneNo)
 {
 
     vector3D midPt(midPoint);
@@ -27,22 +27,26 @@ Drone::Drone(vector3D midPoint, double scale) : _ID(++_droneNo)
     for (int i = 6; i < 8; ++i)
     {
         tmpVec.setCoords(0, 0, 10 * scale);
-        //  std::cout<<_body.getCorner(i)<<"---\n";
         tmpVec = tmpVec + _body.getCorner(i);
         *tmpHex = HexagonalPrism(tmpVec, _basicRotorH * scale, _basicRotorR * scale);
         tmpHex->setOrientation(_body.getOrientation());
         this->_rotors.push_back(*tmpHex);
     }
     delete tmpHex;
-    // delete tmpVec;
+    
+    this->generateNames();
 
     _midPoint.setCoords(midPt.getCoord(0), midPt.getCoord(1),
                         midPt.getCoord(2) + (_basicRotorH * scale) / 2.0);
 
-    this->generateNames();
-    std::cout << "skala: " << scale << "\n";
+    this->setPosition(this->getMidPoint());
+    this->setHeight(((_basicBodyH * scale)+(_basicRotorH * scale))/2.0);
+    this->setCircleRadius(sqrt(pow(_basicBodyL*scale/2.0,2)+pow((_basicBodyW*scale/2.0),2)) + _basicRotorR*sqrt(2.0));
+    // setPosition(getMidPoint());
+    // getchar();
+
 }
-Drone::Drone() : _ID(++_droneNo) {}
+Drone::Drone(): _ID(++_droneNo){}
 void Drone::generateNames()
 {
     string *str1 = new string("");
@@ -70,6 +74,14 @@ void Drone::moveDrone(double x, double speed, double rotorsSpeed)
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); ++i)
         i->moveForward(x);
     this->spinRotors(x, rotorsSpeed);
+    // auto tmpvec = vector3D(x,0,0);
+    this->_midPoint.setCoords(_midPoint.getCoord(0)+x,_midPoint.getCoord(1),_midPoint.getCoord(2));
+    this->setPosition(getMidPoint());
+
+    std::cout<<"--------------------\n";
+    std::cout<<"srodek "<<getMidPoint()<<"\n";
+    std::cout<<"postion "<<getPosition()<<"\n";
+    std::cout<<"--------------------\n";
 }
 
 void Drone::soarDrone(const double pathLen, const double angle, double speed, double rotorsSpeed)
@@ -118,9 +130,9 @@ void Drone::rotateDrone(double angle, double speed, double rotorsSpeed)
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); ++i)
     {
         i->setOrientation(_body.getOrientation());
-        i->rotate(angle, 'z', false, this->getMidPoint());
+        i->rotate(angle, 'z', false, this->getBody().getMidPoint());
     }
-
+    
     if (angle >= 0)
         this->spinRotors(0, rotorsSpeed);
     else
@@ -151,21 +163,18 @@ void Drone::writeToFiles()
 
 Drone::Drone(const Drone &d) : _ID{d.getID()}
 {
-
-    std::cout << "debug01  - con cop\n";
     this->_body = d.getBody();
-    std::cout << "debug02  - con cop\n";
-    //    std::cout<<<<"\n";
     fileNames.push_back(d[0]);
-    std::cout << "debug03  - con cop\n";
     _midPoint = d.getMidPoint();
-    std::cout << "debug04  - con cop\n";
     for (int i = 0; i < 4; ++i)
     {
-        std::cout << "debug051  - con cop\n";
         this->_rotors.push_back(d.getRotor(i));
 
-        std::cout << "debug052  - con cop\n";
         fileNames.push_back(d[i + 1]);
     }
+    this->setPosition(d.getPosition());
+    this->setHeight(d.getHeight());
+    this->setCircleRadius(d.getCircleRadius());
+
+
 }
