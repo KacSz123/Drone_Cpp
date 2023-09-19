@@ -3,24 +3,32 @@
 
 #include "vector2d.hpp"
 #include "matrix2x2.hpp"
-#include "gnuplot_link.hpp"
 #include "geometric_obj.hpp"
+#include <list>
 // #include "scene_obj.hpp"
-class Cuboid:public GeometricObj//,public SceneObj
+class Cuboid : public GeometricObj //,public SceneObj
 {
 
-    private:
-
-    public:
-        Cuboid():GeometricObj(8){};
-        Cuboid(vector3D, double, double, double);
-
+private:
+    std::list<vector3D> _flyPath;
+    double y;
+public:
+    Cuboid() : GeometricObj(8){};
+    Cuboid(const vector3D &, const double, const double, const double,const double y=30);
+    double getY()const{return y;}
+    void printVertexes()
+    {
+        for (VertexVec::iterator i = _vertexes.begin(); i != _vertexes.end(); ++i)
+            std::cout << *i << std::endl;
+        std::cout << std::endl;
+    };
+    ~Cuboid(){ this->_vertexes.clear(); this->_vertexes.shrink_to_fit();};
+    friend std::ostream &operator<<(std::ostream &, Cuboid &);
+    void WriteToStreamExample(ostream &output_stream) { output_stream << (*this) << "\n"; }
+    bool writeToFile(const std::string &fileName);
+    // std::ostream& operator << (std::ostream&);
 };
-std::ostream& operator << (std::ostream&, Cuboid);
-Cuboid& operator += (Cuboid& rect, Vector2d<double, 3> vec);
 
-
-
-
+Cuboid &operator+=(Cuboid &rect, Vector2d<double, 3> vec);
 
 #endif // CUBOID_HPP

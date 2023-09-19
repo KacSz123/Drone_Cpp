@@ -1,9 +1,10 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 #include <iostream>
-
-
-struct VectorConstructorException{};
+// #include <cstdlib>
+struct VectorConstructorException
+{
+};
 
 template <typename T, unsigned int Size>
 class Vector2d
@@ -12,10 +13,22 @@ private:
     T coordinates[Size];
 
 public:
+    static uint _allVectorCounter;
+    static uint _existingVectorCounter;
     Vector2d();
     Vector2d(double, double, double);
+    ~Vector2d()
+    {
+        // --_allVectorCounter;
+        --_existingVectorCounter;
+    }
+
+
     Vector2d(const Vector2d<T, Size> &v) //: Vector2d{v.getCoord(0), v.getCoord(1),v.getCoord(2)}
     {
+
+        _allVectorCounter++;
+        _existingVectorCounter++;
         for (uint i = 0; i < Size; ++i)
             coordinates[i] = v[i];
     }
@@ -37,28 +50,41 @@ public:
     }
     Vector2d<T, Size> operator=(Vector2d<T, Size> v) const
     {
+        // _allVectorCounter++;
+        // _existingVectorCounter++;
         for (uint i = 0; i < Size; ++i)
             coordinates[i] = v[i];
         return *this;
+    }
+
+    static void printCounters()
+    {
+        std::cout << "No. of all created Vectors<>: " << _allVectorCounter << ";\n No. of existing Vectors<>: " << _existingVectorCounter << std::endl;
     }
 };
 
 template <typename T, unsigned int Size>
 Vector2d<T, Size>::Vector2d()
 {
+    // _allVectorCounter++;
+    // _existingVectorCounter++;
+    _allVectorCounter++;
+    _existingVectorCounter++;
     for (uint i = 0; i < Size; ++i)
         coordinates[i] = 0;
 }
 template <typename T, unsigned int Size>
 Vector2d<T, Size>::Vector2d(double x, double y, double z)
 {
+    _allVectorCounter++;
+    _existingVectorCounter++;
     if (Size == 3)
     {
         this->coordinates[0] = x;
         this->coordinates[1] = y;
         this->coordinates[2] = z;
     }
-    else if(Size<3)
+    else if (Size < 3)
         throw VectorConstructorException{};
     else
     {
@@ -66,8 +92,8 @@ Vector2d<T, Size>::Vector2d(double x, double y, double z)
         this->coordinates[1] = y;
         this->coordinates[2] = z;
         for (uint i = 3; i < Size; ++i)
-        this->coordinates[i]=0;
-        std::cout<<"Vector is bigger than 3. The rest of coordinates equal 0\n";
+            this->coordinates[i] = 0;
+        std::cout << "Vector is bigger than 3. The rest of coordinates equal 0\n";
     }
 }
 template <typename T, unsigned int Size>
@@ -129,5 +155,10 @@ Vector2d<T, Size> &operator*(double a, Vector2d<T, Size> vec1)
 ////
 typedef Vector2d<double, 3> vector3D;
 
+template <typename T, unsigned int Size>
+uint Vector2d<T, Size>::_allVectorCounter = 0;
 
-#endif //VECTOR_HPP
+template <typename T, unsigned int Size>
+uint Vector2d<T, Size>::_existingVectorCounter = 0;
+
+#endif // VECTOR_HPP

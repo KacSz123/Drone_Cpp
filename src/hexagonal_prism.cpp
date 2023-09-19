@@ -1,6 +1,7 @@
 #include "geometric_obj.hpp"
 #include "hexagonal_prism.hpp"
 #include<cmath>
+#include<fstream>
 HexagonalPrism::HexagonalPrism(vector3D midPt, double height, double radius):GeometricObj(12)
 {
     Matrix3x3 *m = new Matrix3x3;
@@ -10,9 +11,9 @@ HexagonalPrism::HexagonalPrism(vector3D midPt, double height, double radius):Geo
     this->setMidPoint(midPt);
     m->getZrotationMatrix(angle);
 
-    // (*vup).setCoords(radius,0, height/2.0);
-    (*vup) = (*vup)  ;
-    (*vdown)=(*vdown);
+    (*vup).setCoords(radius,0, height/2.0);
+    // (*vup) = (*vup)  ;
+    // (*vdown)=(*vdown);
 
     for(int i =0; i<6; ++i)
     {
@@ -27,7 +28,7 @@ HexagonalPrism::HexagonalPrism(vector3D midPt, double height, double radius):Geo
     delete vup;
     delete vdown;
 }
-std::ostream& operator<< (std::ostream& ostr, HexagonalPrism hex)
+std::ostream& operator<< (std::ostream& ostr, HexagonalPrism &hex)
 {
     vector3D mup=hex.getMidPoint(), mDown=hex.getMidPoint();
     mup.setCoord(2, hex.getVertex(0).getCoord(2));
@@ -39,4 +40,21 @@ std::ostream& operator<< (std::ostream& ostr, HexagonalPrism hex)
     }
      ostr<<mup<<"\n"<<hex.getVertex(0)<<"\n"<<hex.getVertex(6)<<"\n"<<mDown<<"\n";
     return ostr;
+}
+
+
+bool HexagonalPrism::writeToFile(const std::string &filename)
+{
+    using namespace std;
+       ofstream file_stream;
+       file_stream.open(filename);
+       if (!file_stream.is_open())
+       {
+              cerr << ":(  Operacja otwarcia do zapisu \"" << filename << "\"" << endl
+                   << ":(  nie powiodla sie." << endl;
+              return false;
+       }
+       this->WriteToStreamExample(file_stream);
+       file_stream.close();
+       return !file_stream.fail();
 }
