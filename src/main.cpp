@@ -13,34 +13,24 @@ using namespace std;
 
 int main()
 {
-       std::cout<<"debug0\n";
-       // const int delay = 10000;
-
-       // Drone a = Drone(vector3D(0,0,0));
-       Vector2d<double, 3> *vMid3=new vector3D(0.0, 0.0, 0.0);
-       Vector2d<double, 3> *vMid2=new vector3D(-170.0, 0.0, 0.0);
-       Vector2d<double, 3> *vMid=new vector3D(0.0, 250.0, 0.0);
+       VectorNd<double, 3> *vMid3=new vector3D(0.0, 0.0, 0.0);
+       VectorNd<double, 3> *vMid2=new vector3D(-170.0, 0.0, 0.0);
+       VectorNd<double, 3> *vMid=new vector3D(0.0, 250.0, 0.0);
        vector3D *tab = new vector3D[3]{*vMid,*vMid2,*vMid3};
 
 
        Scene *sc = new Scene();
-       std::cout<<"debug02\n";
-       
-       // auto shared_drone = std::make_shared<Drone>(Drone(tab[i]));
-       
-       // getchar();
+
 
        for(int i=1; i<3;++i)
        {
-                     std::shared_ptr<Drone> a=std::make_shared<Drone>(Drone(tab[i]));
+                     std::shared_ptr<Drone> a=std::make_shared<Drone>(tab[i]);
                      sc->addDrone(a);
        }
 
-       // std::shared_ptr<CuboidObstacle> b=std::make_shared<CuboidObstacle>(CuboidObstacle(*vMid));
-       sc->addObstacle(std::make_shared<CuboidObstacle>(CuboidObstacle(*vMid)));
+       sc->addObstacle(std::make_shared<CuboidObstacle>(*vMid));
 
        vector3D::printCounters();
-       std::cout<<"debug03\n";
        sc->drawScene();
        sc->activateDrone(0);
        getchar();
@@ -60,9 +50,7 @@ int main()
        // sc->checkColision(0);
        getchar();
        delete sc;
-       // a.reset();
-
-       // shared_drone.reset();
+       
        delete vMid;        
        delete vMid2;       
        delete vMid3;     

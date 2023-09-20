@@ -19,7 +19,7 @@ Drone::Drone(vector3D midPoint, double scale):SceneObj{}, _ID(++_droneNo)
     for (int i = 0; i < 2; ++i)
     {
         tmpVec.setCoords(0, 0, 10 * scale);
-        tmpVec = tmpVec + _body.getCorner(i);
+        tmpVec = tmpVec + _body.getVertex(i);
         *tmpHex = HexagonalPrism(tmpVec, _basicRotorH * scale, _basicRotorR * scale);
         tmpHex->setOrientation(_body.getOrientation());
         this->_rotors.push_back(*tmpHex);
@@ -27,7 +27,7 @@ Drone::Drone(vector3D midPoint, double scale):SceneObj{}, _ID(++_droneNo)
     for (int i = 6; i < 8; ++i)
     {
         tmpVec.setCoords(0, 0, 10 * scale);
-        tmpVec = tmpVec + _body.getCorner(i);
+        tmpVec = tmpVec + _body.getVertex(i);
         *tmpHex = HexagonalPrism(tmpVec, _basicRotorH * scale, _basicRotorR * scale);
         tmpHex->setOrientation(_body.getOrientation());
         this->_rotors.push_back(*tmpHex);
@@ -78,13 +78,9 @@ void Drone::moveDrone(double x, double speed, double rotorsSpeed)
     this->_midPoint.setCoords(_midPoint.getCoord(0)+x,_midPoint.getCoord(1),_midPoint.getCoord(2));
     this->setPosition(getMidPoint());
 
-    std::cout<<"--------------------\n";
-    std::cout<<"srodek "<<getMidPoint()<<"\n";
-    std::cout<<"postion "<<getPosition()<<"\n";
-    std::cout<<"--------------------\n";
 }
 
-void Drone::soarDrone(const double pathLen, const double angle, double speed, double rotorsSpeed)
+void Drone::soarDrone(const double pathLen, const double angle, double rotorsSpeed)
 {
     double const x = pathLen * cos(toRadians(angle));
     double const z = pathLen * sin(toRadians(angle));
@@ -126,7 +122,7 @@ void Drone::spinRotors(const double distance, double speed, bool direction)
     delete vel;
 }
 
-void Drone::rotateDrone(double angle, double speed, double rotorsSpeed)
+void Drone::rotateDrone(const double angle, double rotorsSpeed)
 {
     _body.rotate(angle, 'z',true, _body.getMidPoint());
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); ++i)

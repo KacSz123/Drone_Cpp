@@ -28,7 +28,7 @@ HexagonalPrism::HexagonalPrism(vector3D midPt, double height, double radius):Geo
     delete vup;
     delete vdown;
 }
-std::ostream& operator<< (std::ostream& ostr, HexagonalPrism &hex)
+std::ostream& operator<< (std::ostream& strm, HexagonalPrism &hex)
 {
     vector3D mup=hex.getMidPoint(), mDown=hex.getMidPoint();
     mup.setCoord(2, hex.getVertex(0).getCoord(2));
@@ -36,10 +36,10 @@ std::ostream& operator<< (std::ostream& ostr, HexagonalPrism &hex)
 
     for(int i =0; i<6; ++i)
     {
-        ostr<<mup<<"\n"<<hex.getVertex(i)<<"\n"<<hex.getVertex(i+6)<<"\n"<<mDown<<"\n\n";    
+        strm<<mup<<"\n"<<hex.getVertex(i)<<"\n"<<hex.getVertex(i+6)<<"\n"<<mDown<<"\n\n";    
     }
-     ostr<<mup<<"\n"<<hex.getVertex(0)<<"\n"<<hex.getVertex(6)<<"\n"<<mDown<<"\n";
-    return ostr;
+     strm<<mup<<"\n"<<hex.getVertex(0)<<"\n"<<hex.getVertex(6)<<"\n"<<mDown<<"\n";
+    return strm;
 }
 
 

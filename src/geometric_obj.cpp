@@ -15,7 +15,7 @@ GeometricObj::GeometricObj(int a)
         this->_vertexes.push_back(vec);
     // delete vec;
 }
-void GeometricObj::move(Vector2d<double,3> vec)
+void GeometricObj::move(VectorNd<double,3> vec)
 {
  for(VertexVec::iterator i = this->_vertexes.begin(); i!=this->_vertexes.end(); i++)
     *i = *i+vec;
@@ -27,7 +27,7 @@ void GeometricObj::moveForward(double x)
 
     this->setMidPoint( this->getMidPoint() + this->getOrientation() * v);
     for (uint i=0; i<this->_vertexes.size(); i++)
-         this->setVertex(i, this->getCorner(i)+(this->getOrientation() * v));
+         this->setVertex(i, this->getVertex(i)+(this->getOrientation() * v));
 
     // std::cout<<this->getMidPoint()<<std::endl<<std::endl;
 }
@@ -42,7 +42,7 @@ void GeometricObj::soarForward(double x,double z)
     this->setMidPoint( this->getMidPoint() + this->getOrientation() * (*v));
 
     for (uint i=0; i<this->_vertexes.size(); i++)
-         this->setVertex(i, this->getCorner(i)+(this->getOrientation() * (*v)));
+         this->setVertex(i, this->getVertex(i)+(this->getOrientation() * (*v)));
 
     delete v;
 }

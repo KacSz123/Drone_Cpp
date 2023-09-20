@@ -3,234 +3,258 @@
 /*!
  * @file scene.hpp
  * @author {Kacper Szczepanowski} ({kacperszcz159@gmail.com})
- * @brief File modeling class Scene which contains all objects both: drones and obstacles.
+ * @brief File contains  model of a Scene with gemotric objects, both drones and obstacles.
  *
- * @version 0.1
- * @date 2023-09-17
+ * Using module "lacze_do_gnuplota" in order to draw objects inf GnuPlot.
+ * @version 0.9
+ * @date 2023-06-07
  *
  * @copyright Copyright (c) 2023
  *
  */
-// #include "file_operation.hpp"
 #include "drone.hpp"
 #include "cuboid_obstacle.hpp"
-// #include "scene_obj.hpp"
 #include "lacze_do_gnuplota.hpp"
 #include <string>
 #include <list>
 #include <memory>
 #include <unistd.h>
 
-using sh_ptr_scene_obj = std::shared_ptr<SceneObj>;
-using sh_ptr_obst= std::shared_ptr<CuboidObstacle>;
 /*!
- * @brief New type: list of of shared_ptr to ScecneObj instances
+ * @brief New type model: shared pointer to \see SceneObj.
+ *
+ */
+using sh_ptr_scene_obj = std::shared_ptr<SceneObj>;
+/*!
+ * @brief New type model: shared pointer to \see CuboidObstacle.
+ * 
+ */
+using sh_ptr_obst = std::shared_ptr<CuboidObstacle>;
+/*!
+ * @brief New type: list of of shared_ptr to \see ScecneObj instances.
  *
  */
 using SceneObjectsList = std::list<sh_ptr_scene_obj>;
 
+/*!
+ * @brief New type model: shared pointer to \see Drone.
+ *
+ */
 using sh_ptr_Drone = std::shared_ptr<Drone>;
 /*!
- * @brief New type: list of of shared_ptr to Drone instances
+ * @brief New type: list of of shared_ptr to Drone instances.
  *
  */
 using DronesList = std::list<sh_ptr_Drone>;
+
+/*!
+ * @brief New type model: pointer to PzG::InfoPlikuDoRysowania.
+ *
+ */
 using handFileInfo = PzG::InfoPlikuDoRysowania *;
+
+/*!
+ * @brief New Type model: list of handlers to files.
+ *
+ */
 using fileHandlerList = std::vector<std::vector<handFileInfo>>;
+
+/*!
+ * \brief Scene Model of a robotic scene.
+ *
+ *
+ * Class contains SceneObject such as Drones and Obstacles.
+ * Allows to controll the drones with checking for collisions. Also features adding
+ * Scene objects (and all derived classes) and controll selected.
+ */
 class Scene
 {
 private:
-    constexpr static float Xupper = 400.0;
-    constexpr static float Xlow = -400.0;
-    constexpr static float Yupper = 400.0;
-    constexpr static float Ylow = -400.0;
-    constexpr static float Zupper = 400.0;
-    constexpr static float Zlow = -400.0;
-    
+    /*!
+     * @brief Plot boundaries.
+     *
+     */
+    constexpr static float Xupper = 400.0, Xlow = -400.0, Yupper = 400.0,
+                           Ylow = -400.0, Zupper = 400.0, Zlow = -400.0;
+
+    /*!
+     * @brief List of all objects.
+     *
+     * List of all objects, used for collision test. \see SceneObjectsList.
+     */
     SceneObjectsList _sceneObjList;
+
+    /*!
+     * @brief List Drones.
+     *
+     * List of all Drones, used for controll specific Drone. \see DronesList.
+     */
     DronesList _dronesList;
-    
+
+    /*!
+     * @brief Active Drone to take action.
+     *
+     */
     sh_ptr_Drone _activeDrone;
+
+    /*!
+     * @brief Active Obstacle to take action.
+     *
+     */
     sh_ptr_obst _activeObstacle;
 
+    /*!
+     * @brief List of handlers to Drone files.
+     *
+     * List for visualization in Gnuplot.
+     */
     fileHandlerList _dronesFilesList;
+
+    /*!
+     * @brief List of handlers to Obstacle files.
+     *
+     * List for visualization of Obstacles in Gnuplot.
+     */
     fileHandlerList _obstacleFilesList;
-    
-    handFileInfo  _pathHandler;
+
+    /*!
+     * @brief TBA
+     *
+     */
+    handFileInfo _pathHandler;
+
+    /*!
+     * @brief Visualization in Gnuplot.
+     *
+     * Object provided by "lacze_do_gnuplota.hpp". Object for visualization in \p Gnuplot
+     */
     PzG::LaczeDoGNUPlota _link;
-    
 
 public:
-    Scene(/* args */);
-    ~Scene();
-    void addDrone(vector3D midPt, double scale)
-    {
-        auto drone = std::make_shared<Drone>(Drone(midPt, scale));
-        _sceneObjList.push_back(drone);
-        _dronesList.push_back(drone);
-        this->addDronesFileToGPLink(drone);
-        drone.reset();
-    }
-    void addDrone(sh_ptr_Drone drone)
-    {
-        _sceneObjList.push_back(drone);
-        _dronesList.push_back(drone);
-        drone->writeToFiles();
+    /*!
+     * @brief Construct a new Scene object
+     *
+     * And configure visualization Link
+     */
+    Scene();
+    /*!
+     * @brief Destroy the Scene object
+     *
+     */
+    ~Scene(){};
 
-        this->addDronesFileToGPLink(drone);
-        this->drawScene();
-    }
-    void activateDrone(uint i)
-    {
-        try
-        {
-            _activeDrone = *(std::next(_dronesList.begin(), i));
-        for(long unsigned int it=0; it<_dronesFilesList.size(); ++it)
-            {
-                auto itt = _dronesFilesList[it];
-                if(it==i)
-                {
-                    for(std::vector<handFileInfo>::iterator it2=itt.begin(); it2!=itt.end(); ++it2)
-                        (*it2)->ZmienSzerokosc(2);
-                }
-                else
-                {
-                    for(std::vector<handFileInfo>::iterator it2=itt.begin(); it2!=itt.end(); ++it2)
-                        (*it2)->ZmienSzerokosc(1);
-                }
-            }
-        }
-        catch (std::bad_alloc *a)
-        {
-            std::cout << "Wron index of Drone list!\n";
-            if (_dronesList.size() == 0)
-                std::cout << "List of Drones is empty!\n";
-            // break;
-        }
-    }
-    void moveActiveDroneForward(double pathLen, double speed = 1)
-    {
-        for (double i = 0; i < pathLen; i += speed)
-        {
-            _activeDrone->moveDrone(speed);
-            _activeDrone->writeToFiles();
-            usleep(1500);
-            drawScene();
-            if (checkForCollision(_activeDrone))
-            {
-                break;
-            }
-        }
-    }
+    /*!
+     * @brief Insert new Drone object to scene.
+     *
+     * Creates new object and insert it to Drones list and to SceneObj list.
+     * @param[in] midPt - base point of Drone.
+     * @param[in] scale - Scale Drones size.
+     */
+    void addDrone(vector3D midPt, double scale);
+    /*!
+     * @brief  Insert new Drone object to scene.
+     *
+     * Insert new Drone to Drones list and to SceneObj list. New object
+     * created based on s
+     * @param[in] drone - pointer to drone
+     */
+    void addDrone(sh_ptr_Drone drone);
+
+    /*!
+     * @brief Activates specify  Drone on list.
+     *
+     * @param[in] i - index of list
+     */
+    void activateDrone(uint i);
+
+    /*!
+     * @brief Move active drone.
+     *
+     * Move active drone forwad (relative to own X axis) with specify speed.
+     *
+     * @param[in] pathLen - length of drone path
+     * @param[in] speed - speed of animation
+     */
+
+    void moveActiveDroneForward(double pathLen, double speed = 1);
+
+    /*!
+     * @brief Rotate active drone.
+     *
+     * Rotates active drone relative to Z axis) with specify speed of drone and rotors.
+     * Roation is animated.
+     * @param[in] angle - angle of rotation.
+     * @param[in] speed - speed of animation.
+     * @param[in] rotSpeed - speed of rotors spin animation.
+     */
+    void rotateActiveDrone(double angle, double speed = 1, double rotSpeed = 1);
+
+    /*!
+     * @brief Soar active drone.
+     *
+     * Soar active drone relative to X and Z axis.
+     * @param[in] pathLen - length of drones path.
+     * @param[in] angle - angle going up.
+     * @param[in] speed - speed of animation.
+     */
+    void soarActiveDrone(double pathLen, double angle, double speed = 1);
+
+    /*!
+     * @brief Looks for collision with certain object.
+     *
+     * Compares position of all objects on Scene with specify object.
+     * @param[in] obj - chosen object.
+     * @return true - collision detected.
+     * @return false - no collisions.
+     */
+    bool checkForCollision(sh_ptr_Drone obj);
+
+    /*!
+     * @brief Visualization config
+     *
+     * Uses Lacze_do_Gnuplota.
+     */
+    void configureGnuplotLink();
 
 
-    void rotateActiveDrone(double angle, double speed = 1, double rotSpeed=1)
-    {
-        // auto tmpD = std::make_shared<Drone>(acti)
-        for (double i = 0; i < abs(angle); i += speed)
-        {
-            auto a= angle>0?1:-1;
-            _activeDrone->rotateDrone(a, speed,rotSpeed);
-            _activeDrone->writeToFiles();
-            usleep(1500);
-            drawScene();
-            if (checkForCollision(_activeDrone))
-            {
-                std::cout<<"WARNING! Close to collision!\n";
-            }
-        }
-    }
-    void soarActiveDrone(double pathLen, double angle, double speed=1)
-        {
+    /*!
+     * @brief Add Drone to visualization object.
+     * 
+     * Insert new object to Drones list, and Object list.
+     * 
+     * @param[in] drone - shared pointer to Drone.
+     */
+    void addDronesFileToGPLink(sh_ptr_Drone drone);
 
-        for (double i = 0; i < abs(pathLen); i += speed)
-        {
-            // auto a= angle>0?1:-1;
-            _activeDrone->soarDrone(speed, angle);
-            _activeDrone->writeToFiles();
-            usleep(1500);
-            drawScene();
-            if (checkForCollision(_activeDrone))
-            {
-                std::cout<<"WARNING! Close to collision!\n";
-            }
-        }
-    }
+    /*!
+     * @brief Add obstacle to scene
+     * 
+     * @param obs - \see sh_ptr_obst to obstacle
+     */
+    void addObstacle(sh_ptr_obst obs);
+    /*!
+     * @brief Add Obstacle to visualization object.
+     * 
+     * Insert new object to Obstacles list, and Object list.
+     * 
+     * @param[in] cObst - shared pointer to CuboidObstacle.
+     */
+    void addObstacleToGPlink(sh_ptr_obst cObst);
 
-    bool checkForCollision(sh_ptr_Drone obj)
-    {
+    
+    /*!
+     * @brief Check for collision.
+     * 
+     * Checking if there is any collision for object selected by place in list.
+     * 
+     * @param droneIndex - index of Drone in list.
+     */
+    void checkColision(int droneIndex);
 
-        for (SceneObjectsList::iterator i = _sceneObjList.begin(); i != _sceneObjList.end(); ++i)
-        {
-            if (*i != obj && obj->ifDetectedCollision((*i)))
-            {
-                std::cout << "Collision!\n";
-                return true;
-            }
-        }
-        std::cout << "NO Collision!\n";
-        return false;
-    }
-    void configureGnuplotLink()
-    {
-        _link.ZmienTrybRys(PzG::TR_3D);
-        _link.UstawZakresX(Xlow, Xupper);
-        _link.UstawZakresY(Ylow, Yupper);
-        _link.UstawZakresZ(Zlow, Zupper);
-        _link.UstawRotacjeXZ(40, 40);
-        
-    }
-    void addDronesFileToGPLink(sh_ptr_Drone drone)
-    {
-        std::vector<handFileInfo> tmp;
-        static int kolor = 1;
-        if (kolor > 10)
-            kolor = 1;
-        PzG::InfoPlikuDoRysowania *fileInfo = &_link.DodajNazwePliku((*drone)[0].c_str());
-        fileInfo->ZmienKolor(kolor);
-        tmp.push_back(fileInfo);
-        for (int i = 1; i < 5; ++i)
-        {
-            PzG::InfoPlikuDoRysowania *fileInfo = &_link.DodajNazwePliku((*drone)[i].c_str());
-            tmp.push_back(fileInfo);
-            fileInfo->ZmienKolor(kolor);
-        }
-        _dronesFilesList.push_back(tmp);
-        ++kolor;
-    }
-    void addObstacle(sh_ptr_obst obs)
-    {
-        _sceneObjList.push_back(obs);
-        obs->writeToFile();
-        this->addObstacleToGPlink(obs);
-        this->drawScene();
-    }
-    void addObstacleToGPlink(sh_ptr_obst cObst)
-    {
-        constexpr static int kolor_ = 16;
-        PzG::InfoPlikuDoRysowania *fileInfo = &_link.DodajNazwePliku(cObst->getFileName().c_str());
-        fileInfo->ZmienKolor(kolor_);
-        fileInfo->ZmienSzerokosc(2);
-    }
-
-    void checkColision(int droneIndex)
-    {
-        try
-        {
-            DronesList::iterator it = std::next(_dronesList.begin(), droneIndex);
-            checkForCollision((*it));
-        }
-        catch (std::bad_alloc *a)
-        {
-            std::cout << "Wron index of Drone list!\n";
-            if (_dronesList.size() == 0)
-                std::cout << "List of Drones is empty!\n";
-        }
-        catch (...)
-        {
-            std::cout << "sth went wrong, but idk;\n";
-        }
-    }
+    /*!
+     * @brief Draw scene in Gnuplot
+     * 
+     */
     void drawScene() { _link.Rysuj(); }
 };
 
