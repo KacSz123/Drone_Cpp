@@ -23,8 +23,8 @@ Cuboid::Cuboid(const vector3D &midPt,const double lenX, const double lenY,const 
 std::ostream &operator<<(std::ostream &strm, Cuboid &rect)
 {
     vector3D *x = new vector3D, *m = new vector3D, *y = new vector3D;
-    (*x) = rect.getCorner(0);
-    (*y) = rect.getCorner(1);
+    (*x) = rect.getVertex(0);
+    (*y) = rect.getVertex(1);
     (*m) = rect.getMidPoint();
     
     vector3D *mLeft = new vector3D((*m)[0], (*m)[1]-rect.getY(), (*m)[2]), *mRight = new vector3D((*m)[0],  (*m)[1]+rect.getY(), (*m)[2]);
@@ -40,13 +40,13 @@ std::ostream &operator<<(std::ostream &strm, Cuboid &rect)
     {
         if (i % 2 == 0)
             strm << (*mLeft) << "\n";
-        strm << rect.getCorner(i) << "\n";
+        strm << rect.getVertex(i) << "\n";
         if (i % 2 == 1)
             strm << (*mRight) << "\n\n";
     }
     strm << (*mLeft) << "\n"
-         << rect.getCorner(0) << "\n"
-         << rect.getCorner(1) << "\n"
+         << rect.getVertex(0) << "\n"
+         << rect.getVertex(1) << "\n"
          << (*mRight) << "\n";
 
     // cleaning up
