@@ -1,8 +1,9 @@
-OBJ
-OBJ/*
+
+OBJ/*.o
 Program
 .vscode/*
 .vscode
 #README.md
 doc/html
-# doc
+doc/latex/
+doc/html/

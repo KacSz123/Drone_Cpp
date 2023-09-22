@@ -19,7 +19,12 @@
 #include <list>
 #include <memory>
 #include <unistd.h>
-
+#include <thread>
+#include <future>
+#include <mutex>
+#include <cstdarg>
+    
+// #include <process.h>
 /*!
  * @brief New type model: shared pointer to \see SceneObj.
  *
@@ -30,6 +35,10 @@ using sh_ptr_scene_obj = std::shared_ptr<SceneObj>;
  * 
  */
 using sh_ptr_obst = std::shared_ptr<CuboidObstacle>;
+
+using ObstacleList = std::list<sh_ptr_obst>;
+
+
 /*!
  * @brief New type: list of of shared_ptr to \see ScecneObj instances.
  *
@@ -59,6 +68,8 @@ using handFileInfo = PzG::InfoPlikuDoRysowania *;
  */
 using fileHandlerList = std::vector<std::vector<handFileInfo>>;
 
+using obstFileHandList = std::vector<handFileInfo>;
+
 /*!
  * \brief Scene Model of a robotic scene.
  *
@@ -67,9 +78,12 @@ using fileHandlerList = std::vector<std::vector<handFileInfo>>;
  * Allows to controll the drones with checking for collisions. Also features adding
  * Scene objects (and all derived classes) and controll selected.
  */
-class Scene
+ class Scene
 {
 private:
+ std::mutex m;
+
+
     /*!
      * @brief Plot boundaries.
      *
@@ -90,6 +104,9 @@ private:
      * List of all Drones, used for controll specific Drone. \see DronesList.
      */
     DronesList _dronesList;
+
+
+    ObstacleList _obstaclesList;
 
     /*!
      * @brief Active Drone to take action.
@@ -115,7 +132,7 @@ private:
      *
      * List for visualization of Obstacles in Gnuplot.
      */
-    fileHandlerList _obstacleFilesList;
+    obstFileHandList _obstacleFilesList;
 
     /*!
      * @brief TBA
@@ -160,12 +177,37 @@ public:
      */
     void addDrone(sh_ptr_Drone drone);
 
+    void printAvailableDrones()
+    {
+        std::cout<<"Available drones [ID]: ";
+        for(auto d:_dronesList)
+        {
+            std::cout<<d->getID()<<", ";
+        }
+        std::cout<<std::endl;
+    }
+
+    void printAvailableObstacles()
+    {
+        std::cout<<"Available drones [ID]: ";
+        for(auto o:_obstaclesList)
+        {
+            std::cout<<o->getID()<<", ";
+        }
+        std::cout<<std::endl;
+    }
+
     /*!
      * @brief Activates specify  Drone on list.
      *
      * @param[in] i - index of list
      */
     void activateDrone(uint i);
+
+
+
+    void activateObstacle(uint i);
+
 
     /*!
      * @brief Move active drone.
@@ -188,6 +230,8 @@ public:
      * @param[in] rotSpeed - speed of rotors spin animation.
      */
     void rotateActiveDrone(double angle, double speed = 1, double rotSpeed = 1);
+
+    void rotateActiveDrone1Step(double angle);
 
     /*!
      * @brief Soar active drone.
@@ -232,6 +276,8 @@ public:
      * @param obs - \see sh_ptr_obst to obstacle
      */
     void addObstacle(sh_ptr_obst obs);
+
+    void addObstacle(vector3D v, double x, double y, double z);
     /*!
      * @brief Add Obstacle to visualization object.
      * 
@@ -256,6 +302,38 @@ public:
      * 
      */
     void drawScene() { _link.Rysuj(); }
+
+    void droneArcMove(double path, double angle, int steps = 100)
+    {
+
+        double stepP = path/steps, stepA = angle/steps;
+        std::cout<<stepP<<"   "<<stepA<<"\n";
+        getchar();
+        for(int i=0; i<steps; ++i)
+        {
+            moveActiveDroneForward1Step(stepP);
+            rotateActiveDrone1Step(stepA);
+        }
+
+
+        std::cout<<_activeDrone->getPosition()<<"\n";
+    }
+
+    void proceedDroneCommand()
+    {
+
+    }
+    void move2Drones(int ind1, int ind2)
+    {
+
+    }
+
+    void moveFewDrones()
+    {
+
+    }
+
+    void moveActiveDroneForward1Step(double pathLen);
 };
 
 #endif

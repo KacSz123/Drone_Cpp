@@ -49,7 +49,7 @@ private:
     * 
     * Value increments when new VectorNd object is created. 
     */
-    static uint _existingVectorCounter;
+    static int _existingVectorCounter;
 public:
     /*!
      * @brief Construct a new Vector Nd object
@@ -90,6 +90,23 @@ public:
         for (uint i = 0; i < Size; ++i)
             _coordinates[i] = v[i];
     }
+
+    VectorNd(VectorNd<T, Size>&& v)
+    {
+        _allVectorCounter++;
+        _existingVectorCounter++;
+        for (uint i = 0; i < Size; ++i)
+            _coordinates[i] = v[i];
+    }
+
+    VectorNd(const VectorNd<T, Size>&& v)
+    {
+        _allVectorCounter++;
+        _existingVectorCounter++;
+        for (uint i = 0; i < Size; ++i)
+            _coordinates[i] = v[i];
+    }
+
 
     /*!
      * @brief Set the _coordinate value.
@@ -166,7 +183,23 @@ public:
     {
         std::cout << "No. of all created Vectors<>: " << _allVectorCounter << ";\n No. of existing Vectors<>: " << _existingVectorCounter << std::endl;
     }
+ 
+//   std::istream& operator>> (std::istream& is, VectorNd<T,Size> &v);
 };
+
+template <typename T, unsigned int Size>
+    std::istream& operator>> (std::istream& is, VectorNd<T,Size> &v)
+{
+   T tmp;
+
+    for(uint i=0; i<Size; ++i)
+    {
+
+        is>>tmp;
+        v.setCoord(i, tmp);
+    }
+    return is;
+}
 
 template <typename T, unsigned int Size>
 VectorNd<T, Size>::VectorNd()
@@ -257,6 +290,7 @@ std::ostream &operator<<(std::ostream &ostrm, VectorNd<T, Size> v)
     return ostrm;
 }
 
+
 /*!
  * @brief Overload of operator \b += .
  * 
@@ -342,6 +376,6 @@ template <typename T, unsigned int Size>
 uint VectorNd<T, Size>::_allVectorCounter = 0;
 
 template <typename T, unsigned int Size>
-uint VectorNd<T, Size>::_existingVectorCounter = 0;
+int VectorNd<T, Size>::_existingVectorCounter = 0;
 
 #endif // VECTOR_HPP

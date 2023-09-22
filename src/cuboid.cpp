@@ -8,6 +8,8 @@ Cuboid::Cuboid(const vector3D &midPt,const double lenX, const double lenY,const 
 {
 
     // std::cout<<midPt<<std::endl;
+    
+
     this->setMidPoint(midPt);
 
     this->setVertexCoords(0, midPt[0] + lenX / 2, midPt[1] - lenY / 2, midPt[2] + lenZ / 2);
@@ -22,12 +24,14 @@ Cuboid::Cuboid(const vector3D &midPt,const double lenX, const double lenY,const 
 
 std::ostream &operator<<(std::ostream &strm, Cuboid &rect)
 {
-    vector3D *x = new vector3D, *m = new vector3D, *y = new vector3D;
-    (*x) = rect.getVertex(0);
-    (*y) = rect.getVertex(1);
-    (*m) = rect.getMidPoint();
+    vector3D *x = new vector3D(rect.getVertex(0)), *m = new vector3D(rect.getMidPoint()), *y = new vector3D(rect.getVertex(1));
+    // (*x) = ;
+    // (*y) = rect.getVertex(1);
+    // (*m) = rect.getMidPoint();
     
-    vector3D *mLeft = new vector3D((*m)[0], (*m)[1]-rect.getY(), (*m)[2]), *mRight = new vector3D((*m)[0],  (*m)[1]+rect.getY(), (*m)[2]);
+    vector3D *mLeft = new vector3D((*m)[0], rect.getMidPoint()[1]-rect.getY(), (*m)[2]), *mRight = new vector3D((*m)[0],  (*m)[1]+rect.getY(), (*m)[2]);
+
+    
     Matrix3x3 ma=rect.getOrientation();
     (*mLeft) = (*mLeft) - rect.getMidPoint();
     (*mLeft) = ma*(*mLeft);

@@ -76,6 +76,8 @@ public:
      * @param[in] z  - z size of Cuboid.
      */
     CuboidObstacle(vector3D& v,double x=Xdefault, double y=Ydefault,double z=Zdefault);
+    
+    CuboidObstacle(const vector3D &v,double x=Xdefault, double y=Ydefault,double z=Zdefault);
     /*!
      * @brief Destroy the Cuboid Obstacle object
      * 

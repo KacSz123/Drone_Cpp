@@ -16,7 +16,7 @@
 #include "hexagonal_prism.hpp"
 #include "cuboid.hpp"
 #include "scene_obj.hpp"
-
+#include <mutex>
 #define DATA_DIR "./data/"
 /*!
  * @brief Vector of rotors
@@ -41,6 +41,7 @@ typedef std::vector<std::string> fileVec;
 class Drone: public SceneObj
 {
     private:
+    std::mutex m;
     /*!
      * @brief Basic Drone size.
      * 
@@ -91,6 +92,7 @@ class Drone: public SceneObj
          * TBA.
          */
         std::vector<vector3D> _path;
+        double _scale;
 
     public:
         
@@ -117,9 +119,13 @@ class Drone: public SceneObj
          * @brief Construct a new Drone object based on another Drone object.
          * 
          * Copy constructor of Drone object.
-         * @param[in] v Instance of Drone object to copy.
+         * @param[in] d Instance of Drone object to copy.
          */
-        Drone(const Drone &v);
+        Drone(const Drone &d);
+
+
+        Drone(const Drone &&v);
+
 
         /*!
          * @brief Destroy the Drone object
@@ -248,7 +254,7 @@ class Drone: public SceneObj
          * 
          * @param[in] a New center vector value. 
          */
-        void setMidPoint(vector3D& a){this->_midPoint=a;}
+        void setMidPoint(const vector3D& a){this->_midPoint=a;}
 
         /*!
          * @brief Print body on std out.

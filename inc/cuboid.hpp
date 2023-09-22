@@ -31,6 +31,8 @@ private:
      * Help variable for visualization in gnuplot (surface plot).
      */
     double y;
+    // double x;
+    // double z;
 
 public:
     /*!
@@ -51,6 +53,18 @@ public:
     Cuboid(const vector3D &midPt, const double lenX,
            const double lenY, const double lenZ, const double y = 30);
 
+
+
+    Cuboid &operator=(const Cuboid &C)
+    {
+        for(int i =0; i<8; ++i)
+        {
+            this->setVertex(i, C.getVertex(i));
+        }
+        this->setMidPoint(C.getMidPoint());
+        this->y = C.getY();
+        return *this;
+    }
     /*!
      * @brief Destroy the Cuboid object
      *

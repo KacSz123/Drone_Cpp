@@ -2,6 +2,7 @@
 
 #include "drone.hpp"
 #include <cmath>
+#include <unistd.h>
 using namespace std;
 unsigned int Drone::_droneNo = 0;
 // static inline double toRad
@@ -9,7 +10,7 @@ inline  double toRadians(const double radians)
 {
     return radians * (M_PI / 180);
 }
-Drone::Drone(vector3D midPoint, double scale):SceneObj{}, _ID(++_droneNo)
+Drone::Drone(vector3D midPoint, double scale):SceneObj{}, _ID(++_droneNo),_scale{scale}
 {
 
     vector3D midPt(midPoint);
@@ -70,13 +71,17 @@ void Drone::printNamesOnStd()
 }
 void Drone::moveDrone(double x, double speed, double rotorsSpeed)
 {
+    std::lock_guard<mutex> guard(m);
     _body.moveForward(x);
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); ++i)
         i->moveForward(x);
     this->spinRotors(x, rotorsSpeed);
-    // auto tmpvec = vector3D(x,0,0);
-    this->_midPoint.setCoords(_midPoint.getCoord(0)+x,_midPoint.getCoord(1),_midPoint.getCoord(2));
+    vector3D a(x,0,0);
+    this->setMidPoint(_midPoint+ _body.getOrientation()*a);
+    // _midPoint.setCoord(2,this->getMidPoint()[2]+_basicRotorH*_scale);
     this->setPosition(getMidPoint());
+        std::cout<<"T\n";
+        usleep(10000);
 
 }
 
@@ -95,7 +100,6 @@ void Drone::soarDrone(const double pathLen, const double angle, double rotorsSpe
 
 void Drone::spinRotors(const double distance, double speed, bool direction)
 {
-
     double rotParam;
     double *vel;
     constexpr int velDiff = 5;
@@ -124,6 +128,7 @@ void Drone::spinRotors(const double distance, double speed, bool direction)
 
 void Drone::rotateDrone(const double angle, double rotorsSpeed)
 {
+    std::lock_guard<mutex> guard(m);
     _body.rotate(angle, 'z',true, _body.getMidPoint());
     for (rotorsVec::iterator i = _rotors.begin(); i != _rotors.end(); ++i)
     {
@@ -132,16 +137,19 @@ void Drone::rotateDrone(const double angle, double rotorsSpeed)
     }
     
     if (angle >= 0)
-        this->spinRotors(0, rotorsSpeed);
+        this->spinRotors(angle, rotorsSpeed);
     else
-        this->spinRotors(0, rotorsSpeed, false);
+        this->spinRotors(angle, rotorsSpeed, false);
+    std::cout<<"R\n";
+    usleep(10000);
+
 }
 
 
 
 void Drone::writeToFiles()
 {
-
+    std::lock_guard<mutex> guard(m);
     if (!_body.writeToFile((*this)[0]))
         exit(1);
 
@@ -150,9 +158,31 @@ void Drone::writeToFiles()
         if (!_rotors[i - 1].writeToFile((*this)[i]))
             exit(1);
     }
+    usleep(5000);
+
 }
 
 Drone::Drone(const Drone &d) : _ID{d.getID()}
+{
+    this->_body = d.getBody();
+    fileNames.push_back(d[0]);
+    this->setMidPoint(d.getMidPoint());
+    // _midPoint = d.getMidPoint();
+    for (int i = 0; i < 4; ++i)
+    {
+        this->_rotors.push_back(d.getRotor(i));
+
+        fileNames.push_back(d[i + 1]);
+    }
+    this->setPosition(d.getPosition());
+    this->setHeight(d.getHeight());
+    this->setCircleRadius(d.getCircleRadius());
+
+
+}
+
+
+    Drone::Drone(const Drone &&d):_ID{d.getID()}
 {
     this->_body = d.getBody();
     fileNames.push_back(d[0]);
@@ -167,5 +197,5 @@ Drone::Drone(const Drone &d) : _ID{d.getID()}
     this->setHeight(d.getHeight());
     this->setCircleRadius(d.getCircleRadius());
 
-
+   
 }

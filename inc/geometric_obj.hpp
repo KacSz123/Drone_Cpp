@@ -74,6 +74,8 @@ public:
  * @param[in] vec - new value.
  */
     void setVertexCoords(int i, vector3D &vec) { this->_vertexes[i] = vec; }
+    void setVertex(int i, vector3D &vec) { this->_vertexes[i] = vec; }
+    // void setVertexCoords(int i, vector3D &vec)const { this->_vertexes[i] = vec; }
     /*!
      * @brief Set the Vertex Coords object
      * 
