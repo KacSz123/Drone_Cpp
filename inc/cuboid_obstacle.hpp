@@ -111,8 +111,10 @@ public:
      * 
      * @return Cuboid - body.
      */
-    Cuboid getCuboid()const {return _obstacle;};
+    const Cuboid getCuboid()const {return _obstacle;};
+   
 
+   double getRadius(){return 1.1;}
     /*!
      * @brief Copy Constructor
      * 
@@ -120,14 +122,14 @@ public:
      * Construct a new Cuboid Obstacle object based on another.
      * @param[in] d - basic object.
      */
-   CuboidObstacle(const CuboidObstacle &d):_ID{d.getID()}
-   {
-      _obstacle = d.getCuboid();
-      _filename = d.getFileName();
-      this->setPosition(d.getPosition());
-      this->setHeight(d.getHeight());
-      this->setCircleRadius(d.getCircleRadius());
-   }
+   // CuboidObstacle(const CuboidObstacle &d):_ID{d.getID()}
+   // {
+   //    _obstacle = d.getCuboid();
+   //    _filename = d.getFileName();
+   //    this->setPosition(d.getPosition());
+   //    this->setHeight(d.getHeight());
+   //    this->setCircleRadius(d.getCircleRadius());
+   // }
 }; 
 
 

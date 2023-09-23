@@ -11,7 +11,8 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 #include <iostream>
-
+#include<array>
+#include<vector>
 /*!
  * @brief Exception occured with wrong Size of vector.
  * 
@@ -34,8 +35,9 @@ private:
      * 
      * Table of \e Size coordinates \e T type.
      */
-    T _coordinates[Size];
-
+    // T _coordinates[Size];
+    std::array<T, Size> _coordinates;
+    // std::vector<T, Size> _coordinates;
     /*!
     * @brief Counter of all created objects.
     * 
@@ -68,12 +70,14 @@ public:
      * @param[in] y - y value
      * @param[in] z - z value
      */
+    /////////////////////////////////////////////////////////////////// rule of 5
     VectorNd(double x, double y, double z);
     /*!
      * @brief Destroy the VectorNd object
      * 
      * Decrements number of existing
      */
+
     ~VectorNd(){--_existingVectorCounter;}
 
     /*!
@@ -99,15 +103,23 @@ public:
             _coordinates[i] = v[i];
     }
 
-    VectorNd(const VectorNd<T, Size>&& v)
+
+    VectorNd<T, Size>& operator=(const VectorNd<T, Size> &v)
     {
-        _allVectorCounter++;
-        _existingVectorCounter++;
         for (uint i = 0; i < Size; ++i)
             _coordinates[i] = v[i];
+        return *this;
+    }
+    VectorNd<T, Size>& operator=( VectorNd<T, Size> &&v)
+    {
+        for (uint i = 0; i < Size; ++i)
+            _coordinates[i] = v[i];
+        // _coordinates.
+        return *this;
     }
 
 
+    //////////////////////////////////////////////////////////////////////////
     /*!
      * @brief Set the _coordinate value.
      * 
@@ -162,18 +174,7 @@ public:
      * @return T& - value of specific coordinate.
      */
     T operator[](int i) const { return this->_coordinates[i]; };
-    VectorNd<T, Size> &operator=(VectorNd<T, Size> v)
-    {
-        for (uint i = 0; i < Size; ++i)
-            _coordinates[i] = v[i];
-        return *this;
-    }
-    VectorNd<T, Size> operator=(VectorNd<T, Size> v) const
-    {
-        for (uint i = 0; i < Size; ++i)
-            _coordinates[i] = v[i];
-        return *this;
-    }
+
 /*!
  * @brief Shows values of counters.
  * 
@@ -244,7 +245,7 @@ VectorNd<T, Size>::VectorNd(double x, double y, double z)
  * @return VectorNd<T, Size> Addition result.
  */
 template <typename T, unsigned int Size>
-VectorNd<T, Size> operator+(VectorNd<T, Size> vec1, VectorNd<T, Size> vec2)
+VectorNd<T, Size> operator+(const VectorNd<T, Size> vec1, const VectorNd<T, Size> vec2)
 {
     VectorNd<T, Size> wynik;
     for (int i = 0; i < int(Size); ++i)

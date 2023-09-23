@@ -244,9 +244,9 @@ public:
     void soarActiveDrone(double pathLen, double angle, double speed = 1);
 
     /*!
-     * @brief Looks for collision with certain object.
+     * @brief Looks for collision with selected object.
      *
-     * Compares position of all objects on Scene with specify object.
+     * Compares positions of all objects on Scene with specified object.
      * @param[in] obj - chosen object.
      * @return true - collision detected.
      * @return false - no collisions.
@@ -313,6 +313,8 @@ public:
         {
             moveActiveDroneForward1Step(stepP);
             rotateActiveDrone1Step(stepA);
+            if(checkForCollision(_activeDrone))
+                break;
         }
 
 

@@ -10,13 +10,12 @@ SceneObj::SceneObj()
     ++_existingSceneObjectCounter;
 }
 
-SceneObj::~SceneObj()
-{
-    // _allSceneObjectCounter;
-    // std::cout << "Dest so\n";
-    --_existingSceneObjectCounter;
-}
-
+// SceneObj::~SceneObj()
+// {
+//     // _allSceneObjectCounter;
+//     // std::cout << "Dest so\n";
+//     --_existingSceneObjectCounter;
+// }
 bool SceneObj::ifDetectedCollision(std::shared_ptr<SceneObj> anotherObj) const
 {
 

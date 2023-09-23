@@ -124,15 +124,15 @@ class Drone: public SceneObj
         Drone(const Drone &d);
 
 
-        Drone(const Drone &&v);
+        double getRadius(){return 2.2;}
 
-
+        Drone( Drone &&v);
         /*!
          * @brief Destroy the Drone object
          * 
          * Default destructor of the Drone object.
          */
-        ~Drone(){--_droneNo;};
+        ~Drone(){--_droneNo; _rotors.clear(), _rotors.shrink_to_fit(); fileNames.clear(); fileNames.shrink_to_fit();};
 
         /*!
          * @brief Get the center point of Drone

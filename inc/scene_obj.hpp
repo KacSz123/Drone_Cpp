@@ -73,11 +73,23 @@ public:
         _heightRange = o.getHeight();
         _position = o.getPosition();
     }
+
+
+    SceneObj(SceneObj&& o)
+    {
+        _circleRadius = o.getCircleRadius();
+        _heightRange = o.getHeight();
+        _position = o.getPosition();
+    }
     /*!
      * @brief Destroy the SceneObj object
      * 
      */
-    ~SceneObj();
+    virtual ~SceneObj(){
+    // _allSceneObjectCounter;
+    // std::cout << "Dest so\n";
+    --_existingSceneObjectCounter;
+}
 
     /*!
      * @brief Get the Height object
@@ -86,6 +98,8 @@ public:
      */
     double getHeight()const{return _heightRange;}
     
+
+    virtual double getRadius() = 0;
     /*!
      * @brief Get the Position 
      * 

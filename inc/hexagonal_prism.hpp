@@ -32,12 +32,14 @@ private:
     void WriteToStreamExample(ostream &output_stream) { output_stream << *this << "\n"; }
 
 public:
+
+// explicit operator GeometricObj&() const {return *this;}
     /*!
      * @brief Construct a new Hexagonal Prism object
      *
      * Calls \see GeometricObj(int)
      */
-    HexagonalPrism() : GeometricObj(12){};
+    HexagonalPrism(): GeometricObj(12){};
 
     /*!
      * @brief Construct a new Hexagonal Prism object
@@ -52,10 +54,37 @@ public:
      * @brief Destroy the Hexagonal Prism object
      *
      */
-    ~HexagonalPrism()
+
+    HexagonalPrism(const HexagonalPrism& H):GeometricObj(H){}
+
+    HexagonalPrism& operator=(const HexagonalPrism& H)
     {
+         for (int i = 0; i < this->getVertexesNumber(); ++i)
+        {
+            this->setVertex(i, H.getVertex(i));
+        }
+        this->setMidPoint(H.getMidPoint());
+        this->setOrientation(H.getOrientation());
+
+        return *this;
+    }
+    HexagonalPrism& operator=( HexagonalPrism&& H)
+    {
+         for (int i = 0;i < this->getVertexesNumber(); ++i)
+        {
+            this->setVertex(i, H.getVertex(i));
+        }
+        this->setOrientation(H.getOrientation());
+
+        this->setMidPoint(H.getMidPoint());
+       
+        // (GeometricObj)*this;
+        return *this;
+    }
+    ~HexagonalPrism()
+    {  if(_vertexes.size()) {
         this->_vertexes.clear();
-        this->_vertexes.shrink_to_fit();
+        this->_vertexes.shrink_to_fit();}
     };
 
     /*!

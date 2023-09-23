@@ -15,10 +15,10 @@ GeometricObj::GeometricObj(int a)
         this->_vertexes.push_back(vec);
     // delete vec;
 }
-void GeometricObj::move(VectorNd<double,3> vec)
+void GeometricObj::moveObj(const VectorNd<double,3> vec)
 {
- for(VertexVec::iterator i = this->_vertexes.begin(); i!=this->_vertexes.end(); i++)
-    *i = *i+vec;
+//  for(VertexVec::iterator i = this->_vertexes.begin(); i!=this->_vertexes.end(); i++)
+//     *i = *i+vec;
 }
 void GeometricObj::moveForward(double x)
 {
@@ -118,7 +118,7 @@ void GeometricObj::rotateWithStaticOrient(double angle, char axis)
     
 for(VertexVec::iterator i = this->_vertexes.begin(); i!=this->_vertexes.end(); ++i)
     {
-        *i = *i-this->_midPoint;
+        *i = *i-(this->_midPoint);
         *i = m*(*i);
         *i = *i+this->_midPoint;
     }

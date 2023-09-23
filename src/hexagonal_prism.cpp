@@ -27,6 +27,8 @@ HexagonalPrism::HexagonalPrism(vector3D midPt, double height, double radius):Geo
     delete m;
     delete vup;
     delete vdown;
+
+    
 }
 std::ostream& operator<< (std::ostream& strm, HexagonalPrism &hex)
 {

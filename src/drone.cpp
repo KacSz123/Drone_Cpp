@@ -182,7 +182,7 @@ Drone::Drone(const Drone &d) : _ID{d.getID()}
 }
 
 
-    Drone::Drone(const Drone &&d):_ID{d.getID()}
+    Drone::Drone( Drone &&d):_ID{d.getID()}
 {
     this->_body = d.getBody();
     fileNames.push_back(d[0]);

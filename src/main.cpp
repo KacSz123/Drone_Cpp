@@ -53,75 +53,75 @@ int main()
 {
 
        Scene  *sc = new Scene();
-       char choice = '\0';
-       std::cout<<"podaj vector3d: x,y,z\n";
-       vector3D *a = new vector3D();
-       std::cin>>*a;
-       std::cout<<"podany vector: "<<*a<<"\n";
-       delete a;
-       while (choice!='k')
-       {
+       // char choice = '\0';
+       // std::cout<<"podaj vector3d: x,y,z\n";
+       // vector3D *a = new vector3D();
+       // std::cin>>*a;
+       // std::cout<<"podany vector: "<<*a<<"\n";
+       // delete a;
+       // while (choice!='k')
+       // {
 
-              switch (choice=getchar())
-              {
-              case ADD_DRONE:
-              {
+       //        switch (choice=getchar())
+       //        {
+       //        case ADD_DRONE:
+       //        {
 
-                     break;
-              }
-              case ADD_OBSTACLE:
-              {
-                     break;
-              }
-              case ACTIVATE_DRONE:
-              {
-                     break;
-              }
-              case ACTIVATE_OBSTACLE:
-              {
-                     break;
-              }
-              case REMOVE_DRONE:
-              {
-                     break;
-              }
-              case REMOVE_OBSTACLE:
-              {
-                     break;
-              }
-              case MOVE_ACTIVE_DRONE:
-              {
-                     break;
-              }
-              case ROTATE_ACTIVE_DRONE:
-              {
-                     break;
-              }
-              case MOVEARC_ACTIVE_DRONE:
-              {
-                     break;
-              }
-              case SET_OBSTACLE_POSITIION:
-              {
-                     break;
-              }
-              case SHOW_MENU:
-              {
-                     break;
-              }
-              case SKIP_ENTER:
-              {
-                     break;
-              }
-              case END_PROGRAM:
-              {
+       //               break;
+       //        }
+       //        case ADD_OBSTACLE:
+       //        {
+       //               break;
+       //        }
+       //        case ACTIVATE_DRONE:
+       //        {
+       //               break;
+       //        }
+       //        case ACTIVATE_OBSTACLE:
+       //        {
+       //               break;
+       //        }
+       //        case REMOVE_DRONE:
+       //        {
+       //               break;
+       //        }
+       //        case REMOVE_OBSTACLE:
+       //        {
+       //               break;
+       //        }
+       //        case MOVE_ACTIVE_DRONE:
+       //        {
+       //               break;
+       //        }
+       //        case ROTATE_ACTIVE_DRONE:
+       //        {
+       //               break;
+       //        }
+       //        case MOVEARC_ACTIVE_DRONE:
+       //        {
+       //               break;
+       //        }
+       //        case SET_OBSTACLE_POSITIION:
+       //        {
+       //               break;
+       //        }
+       //        case SHOW_MENU:
+       //        {
+       //               break;
+       //        }
+       //        case SKIP_ENTER:
+       //        {
+       //               break;
+       //        }
+       //        case END_PROGRAM:
+       //        {
 
-                     break;
-              }
-              default:
-                     break;
-              }
-       }
+       //               break;
+       //        }
+       //        default:
+       //               break;
+       //        }
+       // }
 
        // Scene *sc = new Scene();
 
@@ -130,10 +130,12 @@ int main()
 
        sc->addObstacle(std::make_shared<CuboidObstacle>(vector3D(0.0, 250.0, 0.0)));
        sc->addObstacle(std::make_shared<CuboidObstacle>(vector3D(0.0, -250.0, 0.0)));
+       sc->drawScene();
+       getchar();
 
-       vector3D::printCounters();
-       sc->printAvailableDrones();
-       sc->printAvailableObstacles();
+       // vector3D::printCounters();
+       // sc->printAvailableDrones();
+       // sc->printAvailableObstacles();
 
        sc->drawScene();
        sc->activateDrone(0);
@@ -149,8 +151,8 @@ int main()
        sc->rotateActiveDrone(-90);
 
        getchar();
-       sc->droneArcMove(250, 90);
-       getchar();
+       // sc->droneArcMove(250, 90);
+       // getchar();
 
        delete sc;
 
