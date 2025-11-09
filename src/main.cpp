@@ -151,7 +151,7 @@ int main()
        sc->rotateActiveDrone(-90);
 
        getchar();
-       // sc->droneArcMove(250, 90);
+        sc->droneArcMove(250, 90);
        // getchar();
 
        delete sc;
